@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ETL BPS</title>
     <!-- Bootstrap CSS dari CDN -->
-    <link rel="shortcut icon" type="image/png" href="icon.png">
+    <link rel="shortcut icon" type="image/png" href="data/icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -133,7 +133,7 @@ $subcategoriesData = getSubcategories();
                 </div> <!-- col-lg-5 -->
             </div> <!-- row -->
         </div> <!-- tab-pane -->
-        
+
         <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
             <div class="card mb-3">
                 <h5 class="card-header bg-dark text-white">Tabel Dinamis</h5>
