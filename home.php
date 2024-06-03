@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS dari CDN -->
     <link rel="shortcut icon" type="image/png" href="data/icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.1/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -23,128 +24,225 @@ $subcategoriesData = getSubcategories();
         <a class="navbar-brand text-white fw-bold" href="akhir.php">ETL-BPS</a>
     </div>
     <div class="container-fluid">
-        <a class="navbar-brand text-white ms-auto" href="">ETL-process</a>
-        <a class="navbar-brand text-white" href="">ETL-info</a>
+        <a class="navbar-brand text-white fs-6 ms-auto" href="">ETL-process</a>
+        <a class="navbar-brand text-white fs-6" href="">ETL-info</a>
     </div>
 </nav>
 
 <div class="container-fluid">
-    <!-- Dropdown Subkategori -->
-    <?php if ($subcategoriesData['success'] && isset($subcategoriesData['data'][1])): ?>
-        <div class="row mb-3">
-            <div class="col">
-                <label for="subcatDropdown" class="form-label">Filter:</label>
-                <select id="subcatDropdown" class="form-select">
-                    <option value="">Pilih Subkategori</option>
-                    <?php foreach ($subcategoriesData['data'][1] as $subcategory): ?>
-                        <option value="<?= $subcategory->subcat_id ?>"><?= $subcategory->title ?></option>
-                    <?php endforeach; ?>
-                </select>
+    <!-- Card Container -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            ETL-BPS
+        </div>
+        <div class="card-body">
+            <!-- Form API URL dan Dropdown Subkategori (Row 1) -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="apiUrlInput" class="form-label">API URL:</label>
+                    <input type="text" class="form-control" id="apiUrlInput" placeholder="Enter API URL">
+                </div>
+                <div class="col-3">
+                    <label for="subcatDropdown" class="form-label">Filter Subkategori:</label>
+                    <select id="subcatDropdown" class="form-select">
+                        <option value="">Pilih Subkategori</option>
+                        <?php if ($subcategoriesData['success'] && isset($subcategoriesData['data'][1])): ?>
+                            <?php foreach ($subcategoriesData['data'][1] as $subcategory): ?>
+                                <option value="<?= $subcategory->subcat_id ?>"><?= $subcategory->title ?></option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="" disabled>Tidak ada data subkategori</option>
+                        <?php endif; ?>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="variableDropdown" class="form-label">Filter Variabel:</label>
+                    <select id="variableDropdown" class="form-select">
+                        <option value="">Pilih Variabel</option>
+                        <!-- Variabel akan ditambahkan melalui Ajax setelah subjek dipilih -->
+                    </select>
+                </div>
             </div>
-        </div>
-        <!-- Placeholder Dropdown Subjek dan Variabel -->
-        <div class="row mb-3">
-            <div class="col" id="subjectDropdownPlaceholder"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col" id="variableDropdownPlaceholder"></div>
-        </div>
-    <?php else: ?>
-        <div class="alert alert-danger" role="alert">
-            Gagal mengambil data dari API atau tidak ada data yang ditemukan.
-        </div>
-    <?php endif; ?>
+            <!-- Form API Key dan Dropdown Subjek (Row 2) -->
+            <div class="w-100"></div>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="apiKeyInput" class="form-label">API Key:</label>
+                    <input type="text" class="form-control" id="apiKeyInput" placeholder="Enter API Key">
+                </div>
+                <div class="col-6">
+                    <label for="subjectDropdown" class="form-label">Filter Subjek:</label>
+                    <select id="subjectDropdown" class="form-select">
+                        <option value="">Pilih Subjek</option>
+                        <!-- Subjek akan ditambahkan melalui Ajax setelah subkategori dipilih -->
+                    </select>
+                </div>
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="true">Extract</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="transform-tab" data-bs-toggle="tab" data-bs-target="#transform" type="button" role="tab" aria-controls="transform" aria-selected="false">Transform</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="load-tab" data-bs-toggle="tab" data-bs-target="#Load" type="button" role="tab" aria-controls="load" aria-selected="false">Load</button>
-        </li>
-    </ul>
+            </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="true">Extract</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="transform-tab" data-bs-toggle="tab" data-bs-target="#transform" type="button" role="tab" aria-controls="transform" aria-selected="false">Transform</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="load-tab" data-bs-toggle="tab" data-bs-target="#load" type="button" role="tab" aria-controls="load" aria-selected="false">Load</button>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Tab panel 1: Extract -->
+                <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
+                    <div class="card mb-3">
+                        <h5 class="card-header bg-dark text-white">Tabel Dinamis - Extract</h5>
+                        <div class="card-body">
+                            <div class='col'>
+                                <div id='tabledata' class='table-responsive'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab panel 2: Transform -->
+                <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
+                <div class="row mb-3">
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <h5 class="text" style="color: black;">URL SatuData</h5>
+                            <input class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
+        
+                            <!-- Ajax loader -->
+                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <h5 class="text" style="color: black;">Key App SatuData</h5>
+                            <input class="form-control" type="text" placeholder="Ketik Key App" aria-label="default input example">
+        
+                            <!-- Ajax loader -->
+                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <h5 class="text" style="color: black;">Tahun SatuData</h5>
+                            <input class="form-control" type="text" placeholder="2023" aria-label="default input example" disabled>
+        
+                            <!-- Ajax loader -->
+                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-auto col-sm-12 mt-2">
+                            <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
+                            <form class="d-flex" role="search">
+                            <input type="search" class="form-control" placeholder="Search"  aria-label="Search" aria-describedby="basic-addon2">
+                            <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                                <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+                                <button class="btn btn-primary" class="bi bi-search" type="submit">Find</button>
+                            </form>
+        
+                            <!-- Ajax loader -->
+                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    <div class="row mt-3">
+                        <!-- Kolom pertama: Form Configure -->
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <div class="card mb-3">
+                                <h5 class="card-header bg-dark text-white">Select Configure</h5>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="filterInput" class="form-label multiple">Filter :</label>
+                                            <select class="form-select" id="selectFrom" multiple>
+                                                <option value="Wilayah">Wilayah</option>
+                                                <option value="Tahun">Tahun</option>
+                                                <option value="Jumlah">Jumlah</option>
+                                                <option value="Satuan">Satuan</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Kolom kedua: Tombol navigasi -->
+                        <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center">
+                            <div class="mb-2">
+                                <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
+                            </div>
+                            <div class="mb-2">
+                                <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</button>
+                            </div>
+                        </div>
+                        <!-- Kolom ketiga: Form Result id -->
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <div class="card mb-3">
+                                <h5 class="card-header bg-dark text-white">Result</h5>
+                                <div class="card-body">
+                                    <form id="filterForm1">
+                                        <div class="mb-2">
+                                            <label for="filterInput" class="form-label multiple">Filter :</label>
+                                            <select class="form-select" id="selectTo" multiple>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <!-- Tab panel 1: Tabel Data -->
-        <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
-            <div class="card mb-3">
-                <h5 class="card-header bg-dark text-white">Tabel Dinamis</h5>
-                <div class="card-body">
-                    <div class='col'>
-                        <div id='tabledata' class='table-responsive'></div>
+                        <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
+                            <div class="mb-2">
+                                <button type="button" id="" class="btn btn-primary">Match</button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-auto col-sm-12">
+                            <div class="card mb-3">
+                                <h5 class="card-header bg-dark text-white">Result</h5>
+                                <div class="card-body">
+                                    <form id="filterForm1">
+                                        <div class="mb-2">
+                                            <label for="filterInput" class="form-label multiple">Filter :</label>
+                                            <select class="form-select" id="selectTo" multiple>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab panel 3: Load -->
+                <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
+                    <div class="card mb-3">
+                        <h5 class="card-header bg-dark text-white">Tabel Dinamis - Load</h5>
+                        <div class="card-body">
+                            <div class='col'>
+                                <div id='loadTabledata' class='table-responsive'></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Tab panel 2: Configure Table -->
-        <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
-            <div class="row">
-                <!-- Kolom pertama: Form Configure -->
-                <div class="col-lg-5 col-md-auto col-sm-12">
-                    <div class="card mb-3">
-                        <h5 class="card-header bg-dark text-white">Select Configure</h5>
-                        <div class="card-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="filterInput" class="form-label multiple">Filter :</label>
-                                    <select class="form-select" id="selectFrom" multiple>
-                                        <option value="Wilayah">Wilayah</option>
-                                        <option value="Tahun">Tahun</option>
-                                        <option value="Jumlah">Jumlah</option>
-                                        <option value="Satuan">Satuan</option>
-                                    </select>
-                                </div>
-                            </form>
+        <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                    </div>
-                </div> <!-- col-lg-5 -->
-
-                <!-- Kolom kedua: Tombol navigasi -->
-                <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
-                    <div class="mb-2">
-                        <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
-                    </div>
-                    <div class="mb-2">
-                        <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</button>
-                    </div>
-                </div> <!-- col-lg-2 -->
-
-                <!-- Kolom ketiga: Form Result id -->
-                <div class="col-lg-5 col-md-auto col-sm-12">
-                    <div class="card mb-3">
-                        <h5 class="card-header bg-dark text-white">Result</h5>
-                        <div class="card-body">
-                        <form id="filterForm1">
-                                <div class="mb-2">
-                                    <label for="filterInput" class="form-label multiple">Filter :</label>
-                                    <select class="form-select" id="selectTo" multiple>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> <!-- col-lg-5 -->
-            </div> <!-- row -->
-        </div> <!-- tab-pane -->
-
-        <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
-            <div class="card mb-3">
-                <h5 class="card-header bg-dark text-white">Tabel Dinamis</h5>
-                <div class="card-body">
-                    <div class='col'>
-                        <div id='tabledata' class='table-responsive'></div>
+                        <p class="mt-2">Loading...</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div> <!-- tab-content -->
+    </div>
 </div>
 
 <!-- Bootstrap JS dari CDN -->
@@ -156,87 +254,14 @@ $subcategoriesData = getSubcategories();
 <script>
     // Script Ajax dengan menggunakan jQuery
     $(document).ready(function() {
-    
-    $('#moveRight').click(function() {
-        $('#selectFrom option:selected').appendTo('#selectTo');
-    });
-
-    $('#moveLeft').click(function() {
-        $('#selectTo option:selected').appendTo('#selectFrom');
-    });
-
-    // Fungsi untuk menampilkan modal
-    function showLoadingModal() {
-        $('#loadingModal').modal('show');
-    }
-
-    // Fungsi untuk menyembunyikan modal
-    function hideLoadingModal() {
-        $('#loadingModal').modal('hide');
-    }
-
-    // Ketika dropdown subkategori dipilih
-    $('#subcatDropdown').change(function() {
-        var selectedSubcat = $(this).val();
-        showLoadingModal();
-        $.ajax({
-            url: "getSubjects.php",
-            type: "GET",
-            data: { subcat_id: selectedSubcat },
-            dataType: "html",
-            success: function(response) {
-                $('#subjectDropdownPlaceholder').html(response);
-                hideLoadingModal();
-            },
-            error: function(xhr, status, error) {
-                console.error("Gagal mengambil data subjek:", error);
-                hideLoadingModal();
-            }
+        $('#moveRight').click(function() {
+            $('#selectFrom option:selected').appendTo('#selectTo');
         });
-    });
 
-    // Ketika dropdown subjek dipilih
-    $(document).on('change', '#subjectDropdown', function() {
-        var selectedSubject = $(this).val();
-        showLoadingModal();
-        $.ajax({
-            url: "getVariables.php",
-            type: "GET",
-            data: { subject_id: selectedSubject },
-            dataType: "html",
-            success: function(response) {
-                $('#variableDropdownPlaceholder').html(response);
-                hideLoadingModal();
-            },
-            error: function(xhr, status, error) {
-                console.error("Gagal mengambil data variabel:", error);
-                hideLoadingModal();
-            }
+        $('#moveLeft').click(function() {
+            $('#selectTo option:selected').appendTo('#selectFrom');
         });
-    });
 
-    // Ketika dropdown variabel dipilih
-    $(document).on('change', '#variableDropdown', function() {
-        var selectedVar = $(this).val();
-        showLoadingModal();
-        $.ajax({
-            url: "getTableData.php",
-            type: "GET",
-            data: { var_id: selectedVar },
-            dataType: "html",
-            success: function(response) {
-                $('#tabledata').html(response);
-                hideLoadingModal();
-            },
-            error: function(xhr, status, error) {
-                console.error("Gagal mengambil data tabel:", error);
-                hideLoadingModal();
-            }
-        });
-    });
-    });
-
-    $(document).ready(function() {
         // Fungsi untuk menampilkan modal
         function showLoadingModal() {
             $('#loadingModal').modal('show');
@@ -247,6 +272,66 @@ $subcategoriesData = getSubcategories();
             $('#loadingModal').modal('hide');
         }
 
+        // Ketika dropdown subkategori dipilih
+        $('#subcatDropdown').change(function() {
+            var selectedSubcat = $(this).val();
+            showLoadingModal();
+            $.ajax({
+                url: "getSubjects.php",
+                type: "GET",
+                data: { subcat_id: selectedSubcat },
+                dataType: "html",
+                success: function(response) {
+                    $('#subjectDropdown').html(response);
+                    hideLoadingModal();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data subjek:", error);
+                    hideLoadingModal();
+                }
+            });
+        });
+
+        // Ketika dropdown subjek dipilih
+        $(document).on('change', '#subjectDropdown', function() {
+            var selectedSubject = $(this).val();
+            showLoadingModal();
+            $.ajax({
+                url: "getVariables.php",
+                type: "GET",
+                data: { subject_id: selectedSubject },
+                dataType: "html",
+                success: function(response) {
+                    $('#variableDropdown').html(response);
+                    hideLoadingModal();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data variabel:", error);
+                    hideLoadingModal();
+                }
+            });
+        });
+
+        // Ketika dropdown variabel dipilih
+        $(document).on('change', '#variableDropdown', function() {
+            var selectedVar = $(this).val();
+            showLoadingModal();
+            $.ajax({
+                url: "getTableData.php",
+                type: "GET",
+                data: { var_id: selectedVar },
+                dataType: "html",
+                success: function(response) {
+                    $('#tabledata').html(response);
+                    hideLoadingModal();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data tabel:", error);
+                    hideLoadingModal();
+                }
+            });
+        });
+
         // Event saat submit formulir filter
         $('#filterForm1').submit(function(event) {
             event.preventDefault(); // Menghentikan perilaku default saat mengirim formulir
@@ -254,7 +339,6 @@ $subcategoriesData = getSubcategories();
             var selectedValues = $('#selectTo option').map(function() {
                 return $(this).val();
             }).get().join(',');
-            console.log(selectedValues)
             // Lakukan permintaan AJAX untuk memperbarui tabel dengan filter yang diterapkan
             showLoadingModal(); // Tampilkan modal loading
             $.ajax({
@@ -276,18 +360,5 @@ $subcategoriesData = getSubcategories();
 </script>
 
 <!-- Modal Loading -->
-<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-2">Loading...</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
