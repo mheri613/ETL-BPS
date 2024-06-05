@@ -24,223 +24,249 @@ $subcategoriesData = getSubcategories();
         <a class="navbar-brand text-white fw-bold" href="akhir.php">ETL-BPS</a>
     </div>
     <div class="container-fluid">
-        <a class="navbar-brand text-white fs-6 ms-auto" href="">ETL-process</a>
-        <a class="navbar-brand text-white fs-6" href="">ETL-info</a>
+        <ul class="nav nav-underline ms-auto">
+            <li class="nav-item">
+                <a class="nav-link text-white fs-6 active" id="proses-tab" data-bs-toggle="tab" data-bs-target="#proses" type="button" role="tab" aria-controls="proses" aria-selected="true"><i class="bi bi-list"></i> ETL-Proces</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white fs-6" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true"><i class="bi bi-info-circle-fill"></i> Info</a>
+            </li>
+        </ul>
+        <!-- <a class="navbar-brand text-white fs-6 ms-auto" href="">ETL-process</a>
+        <a class="navbar-brand text-white fs-6" href="">ETL-info</a> -->
     </div>
 </nav>
 
 <div class="container-fluid">
-    <!-- Card Container -->
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            ETL-BPS
-        </div>
-        <div class="card-body">
-            <!-- Form API URL dan Dropdown Subkategori (Row 1) -->
-            <div class="row mb-3">
-                <div class="col-4">
-                    <label for="apiUrlInput" class="form-label">API URL:</label>
-                    <input type="text" class="form-control" id="apiUrlInput" placeholder="Enter API URL">
+    <div class="tab-content">
+        <!-- Tab panel 1: Etl proses -->
+        <div class="tab-pane fade show active" id="proses" role="tabpanel" aria-labelledby="proses-tab">
+            <!-- Card Container -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    ETL-BPS
                 </div>
-                <div class="col-3">
-                    <label for="subcatDropdown" class="form-label">Filter Subkategori:</label>
-                    <select id="subcatDropdown" class="form-select">
-                        <option value="">Pilih Subkategori</option>
-                        <?php if ($subcategoriesData['success'] && isset($subcategoriesData['data'][1])): ?>
-                            <?php foreach ($subcategoriesData['data'][1] as $subcategory): ?>
-                                <option value="<?= $subcategory->subcat_id ?>"><?= $subcategory->title ?></option>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <option value="" disabled>Tidak ada data subkategori</option>
-                        <?php endif; ?>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <label for="variableDropdown" class="form-label">Filter Variabel:</label>
-                    <select id="variableDropdown" class="form-select">
-                        <option value="">Pilih Variabel</option>
-                        <!-- Variabel akan ditambahkan melalui Ajax setelah subjek dipilih -->
-                    </select>
-                </div>
-            </div>
-            <!-- Form API Key dan Dropdown Subjek (Row 2) -->
-            <div class="w-100"></div>
-            <div class="row mb-3">
-                <div class="col-4">
-                    <label for="apiKeyInput" class="form-label">API Key:</label>
-                    <input type="text" class="form-control" id="apiKeyInput" placeholder="Enter API Key">
-                </div>
-                <div class="col-6">
-                    <label for="subjectDropdown" class="form-label">Filter Subjek:</label>
-                    <select id="subjectDropdown" class="form-select">
-                        <option value="">Pilih Subjek</option>
-                        <!-- Subjek akan ditambahkan melalui Ajax setelah subkategori dipilih -->
-                    </select>
-                </div>
-
-            </div>
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="true">Extract</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="transform-tab" data-bs-toggle="tab" data-bs-target="#transform" type="button" role="tab" aria-controls="transform" aria-selected="false">Transform</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="load-tab" data-bs-toggle="tab" data-bs-target="#load" type="button" role="tab" aria-controls="load" aria-selected="false">Load</button>
-                </li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <!-- Tab panel 1: Extract -->
-                <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
-                    <div class="card mb-3">
-                        <h5 class="card-header bg-dark text-white">Tabel Dinamis - Extract</h5>
-                        <div class="card-body">
-                            <div class='col'>
-                                <div id='tabledata' class='table-responsive'></div>
-                            </div>
+                <div class="card-body">
+                    <!-- Form API URL dan Dropdown Subkategori (Row 1) -->
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="apiUrlInput" class="form-label">API URL:</label>
+                            <input type="text" class="form-control" id="apiUrlInput" placeholder="Enter API URL">
+                        </div>
+                        <div class="col-3">
+                            <label for="subcatDropdown" class="form-label">Filter Subkategori:</label>
+                            <select id="subcatDropdown" class="form-select">
+                                <option value="">Pilih Subkategori</option>
+                                <?php if ($subcategoriesData['success'] && isset($subcategoriesData['data'][1])): ?>
+                                    <?php foreach ($subcategoriesData['data'][1] as $subcategory): ?>
+                                        <option value="<?= $subcategory->subcat_id ?>"><?= $subcategory->title ?></option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="" disabled>Tidak ada data subkategori</option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <label for="variableDropdown" class="form-label">Filter Variabel:</label>
+                            <select id="variableDropdown" class="form-select">
+                                <option value="">Pilih Variabel</option>
+                                <!-- Variabel akan ditambahkan melalui Ajax setelah subjek dipilih -->
+                            </select>
                         </div>
                     </div>
-                </div>
-                <!-- Tab panel 2: Transform -->
-                <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
-                <div class="row mb-3">
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <h5 class="text" style="color: black;">URL SatuData</h5>
-                            <input class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
-        
-                            <!-- Ajax loader -->
-                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
-                                    <span class="visually-hidden">Loading...</span>
-                            </div>
+                    <!-- Form API Key dan Dropdown Subjek (Row 2) -->
+                    <div class="w-100"></div>
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="apiKeyInput" class="form-label">API Key:</label>
+                            <input type="text" class="form-control" id="apiKeyInput" placeholder="Enter API Key">
                         </div>
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <h5 class="text" style="color: black;">Key App SatuData</h5>
-                            <input class="form-control" type="text" placeholder="Ketik Key App" aria-label="default input example">
-        
-                            <!-- Ajax loader -->
-                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
-                                    <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <h5 class="text" style="color: black;">Tahun SatuData</h5>
-                            <input class="form-control" type="text" placeholder="2023" aria-label="default input example" disabled>
-        
-                            <!-- Ajax loader -->
-                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
-                                    <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-auto col-sm-12 mt-2">
-                            <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
-                            <form class="d-flex" role="search">
-                            <input type="search" class="form-control" placeholder="Search"  aria-label="Search" aria-describedby="basic-addon2">
-                            <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
-                                <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
-                                <button class="btn btn-primary" class="bi bi-search" type="submit">Find</button>
-                            </form>
-        
-                            <!-- Ajax loader -->
-                            <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
-                                    <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    <div class="row mt-3">
-                        <!-- Kolom pertama: Form Configure -->
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <div class="card mb-3">
-                                <h5 class="card-header bg-dark text-white">Select Configure</h5>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="filterInput" class="form-label multiple">Filter :</label>
-                                            <select class="form-select" id="selectFrom" multiple>
-                                                <option value="Wilayah">Wilayah</option>
-                                                <option value="Tahun">Tahun</option>
-                                                <option value="Jumlah">Jumlah</option>
-                                                <option value="Satuan">Satuan</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Kolom kedua: Tombol navigasi -->
-                        <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center">
-                            <div class="mb-2">
-                                <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
-                            </div>
-                            <div class="mb-2">
-                                <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</button>
-                            </div>
-                        </div>
-                        <!-- Kolom ketiga: Form Result id -->
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <div class="card mb-3">
-                                <h5 class="card-header bg-dark text-white">Result</h5>
-                                <div class="card-body">
-                                    <form id="filterForm1">
-                                        <div class="mb-2">
-                                            <label for="filterInput" class="form-label multiple">Filter :</label>
-                                            <select class="form-select" id="selectTo" multiple>
-                                            </select>
-                                            <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                        <div class="col-6">
+                            <label for="subjectDropdown" class="form-label">Filter Subjek:</label>
+                            <select id="subjectDropdown" class="form-select">
+                                <option value="">Pilih Subjek</option>
+                                <!-- Subjek akan ditambahkan melalui Ajax setelah subkategori dipilih -->
+                            </select>
                         </div>
 
-                        <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
-                            <div class="mb-2">
-                                <button type="button" id="" class="btn btn-primary">Match</button>
+                    </div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="true">Extract</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="transform-tab" data-bs-toggle="tab" data-bs-target="#transform" type="button" role="tab" aria-controls="transform" aria-selected="false">Transform</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="load-tab" data-bs-toggle="tab" data-bs-target="#load" type="button" role="tab" aria-controls="load" aria-selected="false">Load</button>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- Tab panel 1: Extract -->
+                        <div class="tab-pane fade show active" id="extract" role="tabpanel" aria-labelledby="extract-tab">
+                            <div class="card mb-3">
+                                <h5 class="card-header bg-dark text-white">Tabel Dinamis - Extract</h5>
+                                <div class="card-body">
+                                    <div class='col'>
+                                        <div id='tabledata' class='table-responsive'></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="col-lg-3 col-md-auto col-sm-12">
-                            <div class="card mb-3">
-                                <h5 class="card-header bg-dark text-white">Result</h5>
-                                <div class="card-body">
-                                    <form id="filterForm1">
-                                        <div class="mb-2">
-                                            <label for="filterInput" class="form-label multiple">Filter :</label>
-                                            <select class="form-select" id="selectTo" multiple>
-                                            </select>
-                                            <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
-                                        </div>
+                        <!-- Tab panel 2: Transform -->
+                        <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
+                        <div class="row mb-3">
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <h5 class="text" style="color: black;">URL SatuData</h5>
+                                    <input class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
+                
+                                    <!-- Ajax loader -->
+                                    <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                            <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <h5 class="text" style="color: black;">Key App SatuData</h5>
+                                    <input class="form-control" type="text" placeholder="Ketik Key App" aria-label="default input example">
+                
+                                    <!-- Ajax loader -->
+                                    <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                            <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <h5 class="text" style="color: black;">Tahun SatuData</h5>
+                                    <input class="form-control" type="text" placeholder="2023" aria-label="default input example" disabled>
+                
+                                    <!-- Ajax loader -->
+                                    <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                            <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-auto col-sm-12 mt-2">
+                                    <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
+                                    <form class="d-flex" role="search">
+                                    <input type="search" class="form-control" placeholder="Search"  aria-label="Search" aria-describedby="basic-addon2">
+                                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                                        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+                                        <button class="btn btn-primary" class="bi bi-search" type="submit">Find</button>
                                     </form>
+                
+                                    <!-- Ajax loader -->
+                                    <div id="loader" class="spinner-border text-info" role="status" style="display: none;">
+                                            <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            <div class="row mt-3">
+                                <!-- Kolom pertama: Form Configure -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Select Configure</h5>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectFrom" multiple>
+                                                        <option value="Wilayah">Wilayah</option>
+                                                        <option value="Tahun">Tahun</option>
+                                                        <option value="Jumlah">Jumlah</option>
+                                                        <option value="Satuan">Satuan</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Kolom kedua: Tombol navigasi -->
+                                <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center">
+                                    <div class="mb-2">
+                                        <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</button>
+                                    </div>
+                                </div>
+                                <!-- Kolom ketiga: Form Result id -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Result</h5>
+                                        <div class="card-body">
+                                            <form id="filterForm1">
+                                                <div class="mb-2">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectTo" multiple>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
+                                    <div class="mb-2">
+                                        <button type="button" id="" class="btn btn-primary">Match</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Result</h5>
+                                        <div class="card-body">
+                                            <form id="filterForm1">
+                                                <div class="mb-2">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectTo" multiple>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Tab panel 3: Load -->
+                    <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
+                            <div class="card mb-3">
+                                <h5 class="card-header bg-dark text-white">Tabel Dinamis - Load</h5>
+                                <div class="card-body">
+                                    <div class='col'>
+                                        <div id='loadTabledata' class='table-responsive'>
+                                            <!-- Konten yang akan dimuat ke dalam tab Load -->
+                                            <!-- Misalnya, tabel atau konten lain -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
-                <!-- Tab panel 3: Load -->
-                <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
-                    <div class="card mb-3">
-                        <h5 class="card-header bg-dark text-white">Tabel Dinamis - Load</h5>
-                        <div class="card-body">
-                            <div class='col'>
-                                <div id='loadTabledata' class='table-responsive'></div>
+                <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading...</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="mt-2">Loading...</p>
-                    </div>
-                </div>
+    </div>
+    <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                ETL-BPS
             </div>
+            <div class="card-body">
+                Aplikasi ETL-BPS bertujuan untuk memindahkan data dari BPS ke dalam website satudata dengan mencocokkan struktur data antara bps dan satudata sehingga data dari bps dapat dikirim ke satu data.
+            </div>    
         </div>
     </div>
 </div>
