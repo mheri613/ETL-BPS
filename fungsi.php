@@ -14,12 +14,19 @@ function getData($url) {
     } else {
         $result['data'] = $response->error;
     }
-    return $result;
+
+    if ($result['success'] && isset($result['data'][1])){
+        foreach ($result['data'][1] as $subcategory){
+            echo "<option value=$subcategory->subcat_id>$subcategory->title </option>";
+        }
+    } else {
+        echo '<option value="" disabled>Tidak ada data subkategori</option>';
+    }
 }
 
 // Fungsi untuk mendapatkan data subkategori dari API
-function getSubcategories() {
-    $url = "https://webapi.bps.go.id/v1/api/list/model/subcat/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
+function getSubcategories($apiUrlInput, $apiKeyInput) {
+    $url = "$apiUrlInput/v1/api/list/model/subcat/lang/ind/domain/1100/key/$apiKeyInput/";
     return getData($url);
 }
 
@@ -52,5 +59,10 @@ function getTableData($var_id = null) {
     }
     return getData($url);
 }
+
+$apiUrlInput = isset($_GET['apiUrlInput']) ? $_GET['apiUrlInput'] : '';
+$apiKeyInput = isset($_GET['apiKeyInput']) ? $_GET['apiKeyInput'] : '';
+getSubcategories($apiUrlInput, $apiKeyInput)
+
 ?>
 

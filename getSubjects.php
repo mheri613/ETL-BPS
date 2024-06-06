@@ -10,9 +10,9 @@ function getData($url) {
 }
 
 // Fungsi untuk mendapatkan data subjek dari API
-function getSubjects($subcat_id) {
+function getSubjects($subcat_id, $apiUrlInput, $apiKeyInput) {
     // URL API yang sesuai
-    $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/subcat/{$subcat_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
+    $url = "$apiUrlInput/v1/api/list/model/subject/lang/ind/domain/1100/subcat/{$subcat_id}/key/$apiKeyInput/";
 
     // Ambil data dari API
     $data = getData($url);
@@ -37,5 +37,7 @@ function getSubjects($subcat_id) {
 
 // Panggil fungsi untuk mendapatkan data subjek
 $subcat_id = isset($_GET['subcat_id']) ? $_GET['subcat_id'] : '';
-getSubjects($subcat_id);
+$apiUrlInput = isset($_GET['apiUrlInput']) ? $_GET['apiUrlInput'] : '';
+$apiKeyInput = isset($_GET['apiKeyInput']) ? $_GET['apiKeyInput'] : '';
+getSubjects($subcat_id, $apiUrlInput, $apiKeyInput);
 ?>

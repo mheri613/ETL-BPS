@@ -13,9 +13,9 @@
 
 <?php
 // Memuat fungsi-fungsi PHP dari file eksternal
-require_once 'fungsi.php';
-// Panggil fungsi untuk mendapatkan data subkategori
-$subcategoriesData = getSubcategories();
+// require_once 'fungsi.php';
+// // Panggil fungsi untuk mendapatkan data subkategori
+// $subcategoriesData = getSubcategories();
 ?>
 
 <!-- Navbar -->
@@ -110,7 +110,21 @@ $subcategoriesData = getSubcategories();
                                 <h5 class="card-header bg-dark text-white">Tabel Dinamis - Extract</h5>
                                 <div class="card-body">
                                     <div class='col'>
-                                        <div id='tabledata' class='table-responsive'></div>
+                                        <div class="table-responsive">
+                                            <table id="dataTable" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Wilayah</th>
+                                                        <th>Tahun</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Satuan</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Data akan ditambahkan secara dinamis oleh JavaScript -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -279,7 +293,33 @@ $subcategoriesData = getSubcategories();
 
 <script>
     // Script Ajax dengan menggunakan jQuery
+    var apiUrlInputPrompt = prompt('Masukkan URL API:');
+    var apiKeyInputPrompt = prompt('Masukkan KEY API:');
+
     $(document).ready(function() {
+        var apiKeyInput = $('#apiKeyInput');
+        var apiUrlInput = $('#apiUrlInput');
+        
+        apiUrlInput.val(apiUrlInputPrompt);
+        apiKeyInput.val(apiKeyInputPrompt);
+        
+        showLoadingModal();
+        
+        $.ajax({
+            url: "fungsi.php",
+            type: "GET",
+            data: { apiKeyInput: apiKeyInput.val(), apiUrlInput: apiUrlInput.val() },
+            dataType: "html",
+            success: function(response) {
+                $('#subcatDropdown').html(response);
+                hideLoadingModal();
+            },
+            error: function(xhr, status, error) {
+                console.error("Gagal mengambil data subjek:", error);
+                hideLoadingModal();
+            }
+        });
+
         $('#moveRight').click(function() {
             $('#selectFrom option:selected').appendTo('#selectTo');
         });
@@ -301,11 +341,14 @@ $subcategoriesData = getSubcategories();
         // Ketika dropdown subkategori dipilih
         $('#subcatDropdown').change(function() {
             var selectedSubcat = $(this).val();
+            var apiKeyInput = $('#apiKeyInput').val();
+            var apiUrlInput = $('#apiUrlInput').val();
+            
             showLoadingModal();
             $.ajax({
                 url: "getSubjects.php",
                 type: "GET",
-                data: { subcat_id: selectedSubcat },
+                data: { subcat_id: selectedSubcat, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
                 dataType: "html",
                 success: function(response) {
                     $('#subjectDropdown').html(response);
@@ -321,11 +364,13 @@ $subcategoriesData = getSubcategories();
         // Ketika dropdown subjek dipilih
         $(document).on('change', '#subjectDropdown', function() {
             var selectedSubject = $(this).val();
+            var apiKeyInput = $('#apiKeyInput').val();
+            var apiUrlInput = $('#apiUrlInput').val();
             showLoadingModal();
             $.ajax({
                 url: "getVariables.php",
                 type: "GET",
-                data: { subject_id: selectedSubject },
+                data: { subject_id: selectedSubject, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
                 dataType: "html",
                 success: function(response) {
                     $('#variableDropdown').html(response);
@@ -337,54 +382,83 @@ $subcategoriesData = getSubcategories();
                 }
             });
         });
-
         // Ketika dropdown variabel dipilih
         $(document).on('change', '#variableDropdown', function() {
             var selectedVar = $(this).val();
+            var apiKeyInput = $('#apiKeyInput').val();
+            var apiUrlInput = $('#apiUrlInput').val();
+
             showLoadingModal();
             $.ajax({
                 url: "getTableData.php",
                 type: "GET",
-                data: { var_id: selectedVar },
-                dataType: "html",
+                data: { var_id: selectedVar, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
+                dataType: "json",
                 success: function(response) {
-                    $('#tabledata').html(response);
-                    hideLoadingModal();
+                    console.log(response);
+                    // Proses data JSON
+                    if (response.status === "OK") {
+                        // Bersihkan tabel sebelum mengisi data baru
+                        $("#dataTable tbody").empty();
+
+                        // Loop melalui datacontent dan buat baris baru untuk setiap entri
+                        $.each(response.datacontent, function(key, value) {
+                            // Ambil kode wilayah dan tahun dari kunci data
+                            var wilayah_kode = key.substring(0, 4);
+                            var tahun_kode = key.substring(7, 10);
+
+                            // Cari label wilayah dan tahun berdasarkan kode
+                            var wilayah_label = "";
+                            var tahun_label = "";
+                            $.each(response.vervar, function(index, item) {
+                                if (item.val == wilayah_kode) {
+                                    wilayah_label = item.label;
+                                    return false; // Hentikan iterasi setelah menemukan label
+                                }
+                            });
+                            $.each(response.tahun, function(index, item) {
+                                if (item.val == tahun_kode) {
+                                    tahun_label = item.label;
+                                    return false; // Hentikan iterasi setelah menemukan label
+                                }
+                            });
+
+                            // Cari unit berdasarkan var_id
+                            var unit = "";
+                            $.each(response.var, function(index, item) {
+                                if (item.val == selectedVar) {
+                                    unit = item.unit;
+                                    return false; // Hentikan iterasi setelah menemukan unit
+                                }
+                            });
+
+                            // Tambahkan baris ke tabel
+                            $("#dataTable tbody").append(
+                                "<tr>" +
+                                "<td>" + wilayah_label + "</td>" +
+                                "<td>" + tahun_label + "</td>" +
+                                "<td>" + value + "</td>" +
+                                "<td>" + unit + "</td>" +
+                                "</tr>"
+                            );
+                        });
+                        hideLoadingModal();
+                    } 
+                    else {
+                        // Tampilkan pesan error jika respons tidak berhasil
+                        console.error("Error:", response.error);
+                        hideLoadingModal();
+                    }
                 },
+
                 error: function(xhr, status, error) {
                     console.error("Gagal mengambil data tabel:", error);
                     hideLoadingModal();
                 }
             });
         });
-
         // Event saat submit formulir filter
-        $('#filterForm1').submit(function(event) {
-            event.preventDefault(); // Menghentikan perilaku default saat mengirim formulir
-            var selectedSubject = $('#variableDropdown').find(":selected").val();
-            var selectedValues = $('#selectTo option').map(function() {
-                return $(this).val();
-            }).get().join(',');
-            // Lakukan permintaan AJAX untuk memperbarui tabel dengan filter yang diterapkan
-            showLoadingModal(); // Tampilkan modal loading
-            $.ajax({
-                url: "updateTableWithFilter.php", // Ganti dengan URL yang sesuai untuk memperbarui tabel dengan filter
-                type: "GET",
-                data: { filter: selectedValues, var_id: selectedSubject }, // Sertakan nilai filter dalam data permintaan
-                dataType: "html",
-                success: function(response) {
-                    $('#tabledata').html(response); // Perbarui konten tabel dengan respons
-                    hideLoadingModal(); // Sembunyikan modal loading setelah selesai
-                },
-                error: function(xhr, status, error) {
-                    console.error("Gagal memperbarui tabel dengan filter:", error);
-                    hideLoadingModal(); // Sembunyikan modal loading jika terjadi kesalahan
-                }
-            });
-        });
     });
 </script>
-
-<!-- Modal Loading -->
 </body>
 </html>

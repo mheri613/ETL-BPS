@@ -10,9 +10,9 @@ function getData($url) {
 }
 
 // Fungsi untuk mendapatkan data variabel dari API
-function getVariables($subject_id) {
+function getVariables($subject_id, $apiUrlInput, $apiKeyInput) {
     // URL API yang sesuai
-    $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/subject/{$subject_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
+    $url = "$apiUrlInput/v1/api/list/model/var/lang/ind/domain/1100/subject/{$subject_id}/key/$apiKeyInput/";
 
     // Ambil data dari API
     $data = getData($url);
@@ -37,5 +37,7 @@ function getVariables($subject_id) {
 
 // Panggil fungsi untuk mendapatkan data variabel
 $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : '';
-getVariables($subject_id);
+$apiUrlInput = isset($_GET['apiUrlInput']) ? $_GET['apiUrlInput'] : '';
+$apiKeyInput = isset($_GET['apiKeyInput']) ? $_GET['apiKeyInput'] : '';
+getVariables($subject_id, $apiUrlInput, $apiKeyInput);
 ?>
