@@ -442,7 +442,6 @@
                             //untuk substring start=jumlah panjang tahun-jumlah panjang datacontent yang telah dikurangi satu
                             //
 
-                            // Cari label wilayah dan tahun berdasarkan kode
                             var wilayah_label = "";
                             var tahun_label = "";
                             $.each(response.vervar, function(index, item) {
@@ -457,7 +456,6 @@
                                     return false; // Hentikan iterasi setelah menemukan label
                                 }
                             });
-
                             // Cari unit berdasarkan var_id
                             var unit = "";
                             $.each(response.var, function(index, item) {
@@ -497,4 +495,15 @@
     });
 </script>
 </body>
+<!-- 
+notes
+
+//ambil panjang datacontent jumlahkan menjadi datacontent.lenght -1
+//untuk substring end
+//ambil panjang string tahun 
+//jumlah panjang datacontent yang telah dikurangi e.g 10
+//untuk substring start=jumlah panjang tahun-jumlah panjang datacontent yang telah dikurangi satu
+// -->
 </html>
+
+
