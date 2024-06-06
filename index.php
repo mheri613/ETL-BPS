@@ -433,6 +433,7 @@
                         $.each(response.datacontent, function(key, value) {
                             // Ambil kode wilayah dan tahun dari kunci data
                             var wilayah_kode = key.substring(0, 4);
+                            var tahun_kode = key.substring(7, 10);
                             
                             //ambil panjang datacontent jumlahkan menjadi datacontent.lenght -1
                             //untuk substring end
