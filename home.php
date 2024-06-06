@@ -287,7 +287,7 @@
     </div>
 </div>
 
-<footer class="container-flex py-5 my-5 border-top bg-secondary">
+<footer class="container-fluid py-5 my-5 border-top bg-secondary ">
     <div class="row row-cols-1 row-cols-md-5">
         <div class="col-lg-3 col-md-auto mb-3">
             <h5 class="text-dark"><i class="bi bi-globe"></i> ETL - PROFILKES </h5>
@@ -433,7 +433,13 @@
                         $.each(response.datacontent, function(key, value) {
                             // Ambil kode wilayah dan tahun dari kunci data
                             var wilayah_kode = key.substring(0, 4);
-                            var tahun_kode = key.substring(7, 10);
+                            
+                            //ambil panjang datacontent jumlahkan menjadi datacontent.lenght -1
+                            //untuk substring end
+                            //ambil panjang string tahun 
+                            //jumlah panjang datacontent yang telah dikurangi e.g 10
+                            //untuk substring start=jumlah panjang tahun-jumlah panjang datacontent yang telah dikurangi satu
+                            //
 
                             // Cari label wilayah dan tahun berdasarkan kode
                             var wilayah_label = "";
@@ -463,10 +469,10 @@
                             // Tambahkan baris ke tabel
                             $("#dataTable tbody").append(
                                 "<tr>" +
-                                "<td>" + wilayah_label + "</td>" +
-                                "<td>" + tahun_label + "</td>" +
-                                "<td>" + value + "</td>" +
-                                "<td>" + unit + "</td>" +
+                                "<td>" + (wilayah_label || "Tidak Diketahui") + "</td>" +
+                                "<td>" + (tahun_label || "Tidak Diketahui") + "</td>" +
+                                "<td>" + (value || "Tidak Diketahui") + "</td>" +
+                                "<td>" + (unit || "Tidak Diketahui") + "</td>" +
                                 "</tr>"
                             );
                         });
@@ -485,6 +491,7 @@
                 }
             });
         });
+
         // Event saat submit formulir filter
     });
 </script>
