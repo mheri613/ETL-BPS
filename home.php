@@ -287,6 +287,38 @@
     </div>
 </div>
 
+<footer class="container-flex py-5 my-5 border-top bg-secondary">
+    <div class="row row-cols-1 row-cols-md-5">
+        <div class="col-lg-3 col-md-auto mb-3">
+            <h5 class="text-dark"><i class="bi bi-globe"></i> ETL - PROFILKES </h5>
+        </div>
+
+        <div class="col-lg-3 col-md-auto mb-3">
+            <h5>Link Website</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">OpenData</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">SatuData</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">GeoPortal</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pintu</a></li>
+            </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-auto mb-3">
+            <h5>Kontak Kami</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item"><p>UPTD Statistik Diskominsa Aceh</p></li>
+                <li class="nav-item"><p>Gedung Sentra Telematika Aceh Jl. Teungku Cot Plieng No.48, Kota Baru, Kec. Kuta Alam, Kota Banda Aceh</p></li>
+            </ul>
+        </div>
+
+        <div class="col-md-auto"></div>
+        <div class="col-md-auto"></div>
+    </div>
+</footer>
+<div class="fixed-bottom text-light bg-dark py-2 margin-center">
+    Dikelola oleh UPTD Statistik Diskominsa Aceh
+</div>
+
 <!-- Bootstrap JS dari CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -296,8 +328,8 @@
 <script>
 
     $(document).ready(function() {
-
-        $( "#apiKeyInput" ).on( "change", function() {
+        $("#apiKeyInput").on( "change", function() {
+            showLoadingModal();
         $.ajax({
             url: "fungsi.php",
             type: "GET",
@@ -306,14 +338,14 @@
             success: function(response) {
                 console.log(response);
                 $('#subcatDropdown').html(response);
-                // hideLoadingModal();
+                hideLoadingModal();
             },
             error: function(xhr, status, error) {
                 console.error("Gagal mengambil data subjek:", error);
-                // hideLoadingModal();
+                hideLoadingModal();
             }
         });
-        } );
+        });
 
         $('#moveRight').click(function() {
             $('#selectFrom option:selected').appendTo('#selectTo');
