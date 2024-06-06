@@ -13,7 +13,7 @@
 
 <?php
 // Memuat fungsi-fungsi PHP dari file eksternal
-// require_once 'fungsi.php';
+//require_once 'fungsi.php';
 // // Panggil fungsi untuk mendapatkan data subkategori
 // $subcategoriesData = getSubcategories();
 ?>
@@ -50,7 +50,8 @@
                     <!-- Form API URL dan Dropdown Subkategori (Row 1) -->
                     <div class="row mb-3">
                         <div class="col-4">
-                            <label for="apiUrlInput" class="form-label">API URL:</label>
+                        <label for="apiUrlInput" class="form-label">API URL:</label>
+                            <!-- Formulir input untuk API URL -->
                             <input type="text" class="form-control" id="apiUrlInput" placeholder="Enter API URL">
                         </div>
                         <div class="col-3">
@@ -78,7 +79,8 @@
                     <div class="w-100"></div>
                     <div class="row mb-3">
                         <div class="col-4">
-                            <label for="apiKeyInput" class="form-label">API Key:</label>
+                        <label for="apiKeyInput" class="form-label">API Key:</label>
+                            <!-- Formulir input untuk API Key -->
                             <input type="text" class="form-control" id="apiKeyInput" placeholder="Enter API Key">
                         </div>
                         <div class="col-6">
@@ -292,33 +294,26 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Script Ajax dengan menggunakan jQuery
-    var apiUrlInputPrompt = prompt('Masukkan URL API:');
-    var apiKeyInputPrompt = prompt('Masukkan KEY API:');
-
+    
     $(document).ready(function() {
-        var apiKeyInput = $('#apiKeyInput');
-        var apiUrlInput = $('#apiUrlInput');
-        
-        apiUrlInput.val(apiUrlInputPrompt);
-        apiKeyInput.val(apiKeyInputPrompt);
-        
-        showLoadingModal();
-        
+
+        $( "#apiKeyInput" ).on( "change", function() {
         $.ajax({
             url: "fungsi.php",
             type: "GET",
-            data: { apiKeyInput: apiKeyInput.val(), apiUrlInput: apiUrlInput.val() },
+            data: { apiKeyInput: $("#apiKeyInput").val(), apiUrlInput: $("#apiUrlInput").val() },
             dataType: "html",
             success: function(response) {
+                console.log(response);
                 $('#subcatDropdown').html(response);
-                hideLoadingModal();
+                // hideLoadingModal();
             },
             error: function(xhr, status, error) {
                 console.error("Gagal mengambil data subjek:", error);
-                hideLoadingModal();
+                // hideLoadingModal();
             }
         });
+        } );
 
         $('#moveRight').click(function() {
             $('#selectFrom option:selected').appendTo('#selectTo');
@@ -382,6 +377,7 @@
                 }
             });
         });
+
         // Ketika dropdown variabel dipilih
         $(document).on('change', '#variableDropdown', function() {
             var selectedVar = $(this).val();
