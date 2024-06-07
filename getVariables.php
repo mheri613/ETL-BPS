@@ -17,21 +17,27 @@ function getVariables($subject_id, $apiUrlInput, $apiKeyInput) {
     // Ambil data dari API
     $data = getData($url);
 
-    // Cek apakah data ditemukan
+    // // Cek apakah data ditemukan
+    // if (isset($data['status']) && $data['status'] == 'OK') {
+    //     // Buat dropdown
+    //     echo '<select id="variableDropdown" class="form-select">';
+    //     echo '<option value="">Pilih Variabel</option>';
+
+    //     // Looping data variabel
+    //     foreach ($data['data'][1] as $variable) {
+    //         echo '<option value="' . $variable['var_id'] . '">' . $variable['title'] . '</option>';
+    //     }
+
+    //     // Tutup dropdown
+    //     echo '</select>';
+    // } else {
+    //     echo 'Tidak ada data variabel ditemukan.';
+    // }
+    
     if (isset($data['status']) && $data['status'] == 'OK') {
-        // Buat dropdown
-        echo '<select id="variableDropdown" class="form-select">';
-        echo '<option value="">Pilih Variabel</option>';
-
-        // Looping data variabel
-        foreach ($data['data'][1] as $variable) {
-            echo '<option value="' . $variable['var_id'] . '">' . $variable['title'] . '</option>';
-        }
-
-        // Tutup dropdown
-        echo '</select>';
+        echo json_encode(array('success' => true, 'data' => $data['data'][1]));
     } else {
-        echo 'Tidak ada data variabel ditemukan.';
+        echo json_encode(array('success' => false, 'message' => 'Tidak ada data variabel ditemukan.'));
     }
 }
 

@@ -15,12 +15,20 @@ function getData($url) {
         $result['data'] = $response->error;
     }
 
-    if ($result['success'] && isset($result['data'][1])){
-        foreach ($result['data'][1] as $subcategory){
-            echo "<option value=$subcategory->subcat_id>$subcategory->title </option>";
-        }
+    // if ($result['success'] && isset($result['data'][1])){
+    //     foreach ($result['data'][1] as $subcategory){
+    //         echo "<option value=$subcategory->subcat_id>$subcategory->title </option>";
+    //     }
+    // } else {
+    //     echo '<option value="" disabled>Tidak ada data subkategori</option>';
+    // }
+
+    header('Content-Type: application/json');
+
+    if ($result['success'] && isset($result['data'][1])) {
+        echo json_encode(array('success' => true, 'data' => $result['data'][1]));
     } else {
-        echo '<option value="" disabled>Tidak ada data subkategori</option>';
+        echo json_encode(array('success' => false, 'message' => 'Tidak ada data subkategori'));
     }
 }
 

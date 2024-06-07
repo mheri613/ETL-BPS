@@ -18,20 +18,26 @@ function getSubjects($subcat_id, $apiUrlInput, $apiKeyInput) {
     $data = getData($url);
 
     // Cek apakah data ditemukan
+    // if (isset($data['status']) && $data['status'] == 'OK') {
+    //     // Buat dropdown
+    //     echo '<select id="subjectDropdown" class="form-select">';
+    //     echo '<option value="">Pilih Subjek</option>';
+
+    //     // Looping data subjek
+    //     foreach ($data['data'][1] as $subjek) {
+    //         echo '<option value="' . $subjek['sub_id'] . '">' . $subjek['title'] . '</option>';
+    //     }
+
+    //     // Tutup dropdown
+    //     echo '</select>';
+    // } else {
+    //     echo 'Tidak ada data subjek ditemukan.';
+    // }
+
     if (isset($data['status']) && $data['status'] == 'OK') {
-        // Buat dropdown
-        echo '<select id="subjectDropdown" class="form-select">';
-        echo '<option value="">Pilih Subjek</option>';
-
-        // Looping data subjek
-        foreach ($data['data'][1] as $subjek) {
-            echo '<option value="' . $subjek['sub_id'] . '">' . $subjek['title'] . '</option>';
-        }
-
-        // Tutup dropdown
-        echo '</select>';
+        echo json_encode(array('success' => true, 'data' => $data['data'][1]));
     } else {
-        echo 'Tidak ada data subjek ditemukan.';
+        echo json_encode(array('success' => false, 'message' => 'Tidak ada data subjek ditemukan.'));
     }
 }
 

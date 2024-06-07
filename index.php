@@ -13,7 +13,7 @@
 
 <?php
 // Memuat fungsi-fungsi PHP dari file eksternal
-//require_once 'fungsi.php';
+// require_once 'fungsi.php';
 // // Panggil fungsi untuk mendapatkan data subkategori
 // $subcategoriesData = getSubcategories();
 ?>
@@ -112,21 +112,7 @@
                                 <h5 class="card-header bg-dark text-white">Tabel Dinamis - Extract</h5>
                                 <div class="card-body">
                                     <div class='col'>
-                                        <div class="table-responsive">
-                                            <table id="dataTable" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Wilayah</th>
-                                                        <th>Tahun</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Satuan</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Data akan ditambahkan secara dinamis oleh JavaScript -->
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                        <div id='tabledata' class='table-responsive'></div>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +304,6 @@
 <div class="fixed-bottom text-light bg-dark py-2 margin-center">
     Dikelola oleh UPTD Statistik Diskominsa Aceh
 </div>
-
 <!-- Bootstrap JS dari CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -326,26 +311,63 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    // Script Ajax dengan menggunakan jQuery
+    
 
     $(document).ready(function() {
-        $("#apiKeyInput").on( "change", function() {
+        var apiKeyInput = $('#apiKeyInput');
+        var apiUrlInput = $('#apiUrlInput');
+
+        apiKeyInput.change(function(){
+            setTimeout(() => {
+                inputApiURL()
+            }, 2000);
+        })
+
+        apiUrlInput.change(function(){
+            setTimeout(() => {
+                inputApiURL()
+            }, 2000);
+        })
+        
+        function inputApiURL(){
+            var apiKeyInput = $('#apiKeyInput').val();
+            var apiUrlInput = $('#apiUrlInput').val();
+            
             showLoadingModal();
-        $.ajax({
-            url: "fungsi.php",
-            type: "GET",
-            data: { apiKeyInput: $("#apiKeyInput").val(), apiUrlInput: $("#apiUrlInput").val() },
-            dataType: "html",
-            success: function(response) {
-                console.log(response);
-                $('#subcatDropdown').html(response);
-                hideLoadingModal();
-            },
-            error: function(xhr, status, error) {
-                console.error("Gagal mengambil data subjek:", error);
-                hideLoadingModal();
-            }
-        });
-        });
+            
+            $.ajax({
+                url: "fungsi.php",
+                type: "GET",
+                data: { apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
+                dataType: "json",
+                success: function(response) {
+                    // $('#subcatDropdown').html(response);
+                    $('#subcatDropdown').empty();
+
+                    if (response.success) {
+                        // Tambahkan opsi default
+                        $('#subcatDropdown').append('<option value="">Pilih Subkategori</option>');
+                        
+                        // Loop melalui data dan tambahkan setiap subkategori sebagai opsi
+                        $.each(response.data, function(index, subcategory) {
+                            $('#subcatDropdown').append(
+                                '<option value="' + subcategory.subcat_id + '">' + subcategory.title + '</option>'
+                            );
+                        });
+                    } else {
+                        // Tampilkan pesan jika tidak ada data
+                        $('#subcatDropdown').append('<option value="" disabled>Tidak ada data subkategori</option>');
+                    }
+
+                    hideLoadingModal();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data subjek:", error);
+                    hideLoadingModal();
+                }
+            });
+        }
 
         $('#moveRight').click(function() {
             $('#selectFrom option:selected').appendTo('#selectTo');
@@ -376,9 +398,27 @@
                 url: "getSubjects.php",
                 type: "GET",
                 data: { subcat_id: selectedSubcat, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
-                dataType: "html",
+                dataType: "json",
                 success: function(response) {
-                    $('#subjectDropdown').html(response);
+                    // $('#subjectDropdown').html(response);
+                    // Pastikan dropdown kosong sebelum menambahkan opsi baru
+                    $('#subjectDropdown').empty();
+                    
+                    if (response.success) {
+                        // Tambahkan opsi default
+                        $('#subjectDropdown').append('<option value="">Pilih Subjek</option>');
+                        
+                        // Loop melalui data dan tambahkan setiap subjek sebagai opsi
+                        $.each(response.data, function(index, subjek) {
+                            $('#subjectDropdown').append(
+                                '<option value="' + subjek.sub_id + '">' + subjek.title + '</option>'
+                            );
+                        });
+                    } else {
+                        // Tampilkan pesan jika tidak ada data
+                        $('#subjectDropdown').append('<option value="" disabled>Tidak ada data subjek ditemukan</option>');
+                    }
+
                     hideLoadingModal();
                 },
                 error: function(xhr, status, error) {
@@ -398,9 +438,28 @@
                 url: "getVariables.php",
                 type: "GET",
                 data: { subject_id: selectedSubject, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
-                dataType: "html",
+                dataType: "json",
                 success: function(response) {
-                    $('#variableDropdown').html(response);
+                    // $('#variableDropdown').html(response);
+
+                    $('#variableDropdown').empty();
+        
+                    if (response.success) {
+                        // Tambahkan opsi default
+                        $('#variableDropdown').append('<option value="">Pilih Variabel</option>');
+                        
+                        // Loop melalui data dan tambahkan setiap variabel sebagai opsi
+                        $.each(response.data, function(index, variable) {
+                            $('#variableDropdown').append(
+                                '<option value="' + variable.var_id + '">' + variable.title + '</option>'
+                            );
+                        });
+                    } else {
+                        // Tampilkan pesan jika tidak ada data
+                        $('#variableDropdown').append('<option value="" disabled>Tidak ada data variabel ditemukan</option>');
+                    }
+
+
                     hideLoadingModal();
                 },
                 error: function(xhr, status, error) {
@@ -415,7 +474,6 @@
             var selectedVar = $(this).val();
             var apiKeyInput = $('#apiKeyInput').val();
             var apiUrlInput = $('#apiUrlInput').val();
-
             showLoadingModal();
             $.ajax({
                 url: "getTableData.php",
@@ -424,66 +482,74 @@
                 dataType: "json",
                 success: function(response) {
                     console.log(response);
-                    // Proses data JSON
-                    if (response.status === "OK") {
-                        // Bersihkan tabel sebelum mengisi data baru
-                        $("#dataTable tbody").empty();
+                    // $('#tabledata').html(response);
 
-                        // Loop melalui datacontent dan buat baris baru untuk setiap entri
-                        $.each(response.datacontent, function(key, value) {
-                            // Ambil kode wilayah dan tahun dari kunci data
-                            var wilayah_kode = key.substring(0, 4);
-                            var tahun_kode = key.substring(7, 10);
-                            
-                            //ambil panjang datacontent jumlahkan menjadi datacontent.lenght -1
-                            //untuk substring end
-                            //ambil panjang string tahun 
-                            //jumlah panjang datacontent yang telah dikurangi e.g 10
-                            //untuk substring start=jumlah panjang tahun-jumlah panjang datacontent yang telah dikurangi satu
-                            //
+                    $('#tabledata').empty();
 
-                            var wilayah_label = "";
-                            var tahun_label = "";
-                            $.each(response.vervar, function(index, item) {
-                                if (item.val == wilayah_kode) {
-                                    wilayah_label = item.label;
-                                    return false; // Hentikan iterasi setelah menemukan label
-                                }
-                            });
-                            $.each(response.tahun, function(index, item) {
-                                if (item.val == tahun_kode) {
-                                    tahun_label = item.label;
-                                    return false; // Hentikan iterasi setelah menemukan label
-                                }
-                            });
-                            // Cari unit berdasarkan var_id
-                            var unit = "";
-                            $.each(response.var, function(index, item) {
-                                if (item.val == selectedVar) {
-                                    unit = item.unit;
-                                    return false; // Hentikan iterasi setelah menemukan unit
-                                }
-                            });
+                    if (response.success) {
+                        let tableHtml = "<table class='table table-bordered'>";
+                        tableHtml += "<thead>";
+                        tableHtml += "<tr>";
+                        tableHtml += "<th scope='col'>Wilayah</th>";
+                        tableHtml += "<th scope='col'>Tahun</th>";
+                        tableHtml += "<th scope='col'>Jumlah</th>";
+                        tableHtml += "<th scope='col'>Satuan</th>";
+                        tableHtml += "</tr>";
+                        tableHtml += "</thead>";
+                        tableHtml += "<tbody>";
 
-                            // Tambahkan baris ke tabel
-                            $("#dataTable tbody").append(
-                                "<tr>" +
-                                "<td>" + (wilayah_label || "Tidak Diketahui") + "</td>" +
-                                "<td>" + (tahun_label || "Tidak Diketahui") + "</td>" +
-                                "<td>" + (value || "Tidak Diketahui") + "</td>" +
-                                "<td>" + (unit || "Tidak Diketahui") + "</td>" +
-                                "</tr>"
-                            );
+                        // Looping data tabel
+                        $.each(response.data, function(key, value) {
+                            if (value !== null && value !== '') {
+                                // Ambil kode wilayah dan tahun dari kunci data
+                                // let wilayah_kode = key.substr(0, 4);
+                                // let tahun_kode = key.substr(7, 3); // Ambil tiga karakter berikutnya sebagai tahun
+
+                                // Cari label wilayah dan tahun berdasarkan kode
+                                let wilayah_label = "";
+                                $.each(response.vervar, function(index, wilayah) {
+                                    if (key.includes(wilayah.val)) {
+                                        wilayah_label = wilayah.label;
+                                        return false; // break loop
+                                    }
+                                });
+
+                                let tahun_label = "";
+                                $.each(response.tahun, function(index, tahun) {
+                                    if (key.includes(tahun.val)) {
+                                        tahun_label = tahun.label;
+                                        return false; // break loop
+                                    }
+                                });
+
+                                // Ambil unit (satuan) dari variabel
+                                let unit = "";
+                                $.each(response.var, function(index, variabel) {
+                                    if (key.includes(variabel.val)) {
+                                        unit = variabel.unit;
+                                        return false; // break loop
+                                    }
+                                });
+
+                                tableHtml += "<tr>";
+                                tableHtml += "<td>" + wilayah_label + "</td>";
+                                tableHtml += "<td>" + tahun_label + "</td>";
+                                tableHtml += "<td>" + value + "</td>";
+                                tableHtml += "<td>" + unit + "</td>";
+                                tableHtml += "</tr>";
+                            }
                         });
-                        hideLoadingModal();
-                    } 
-                    else {
-                        // Tampilkan pesan error jika respons tidak berhasil
-                        console.error("Error:", response.error);
-                        hideLoadingModal();
-                    }
-                },
 
+                        tableHtml += "</tbody>";
+                        tableHtml += "</table>";
+
+                        $('#tabledata').html(tableHtml);
+                    } else {
+                        $('#tabledata').html("<div class='alert alert-danger' role='alert'>Tidak ada data yang tersedia untuk ditampilkan.</div>");
+                    }
+
+                    hideLoadingModal();
+                },
                 error: function(xhr, status, error) {
                     console.error("Gagal mengambil data tabel:", error);
                     hideLoadingModal();
@@ -492,18 +558,114 @@
         });
 
         // Event saat submit formulir filter
+        $('#filterForm1').submit(function(event) {
+            event.preventDefault(); // Menghentikan perilaku default saat mengirim formulir
+            var selectedSubject = $('#variableDropdown').find(":selected").val();
+            var selectedValues = $('#selectTo option').map(function() {
+                return $(this).val();
+            }).get().join(',');
+            // Lakukan permintaan AJAX untuk memperbarui tabel dengan filter yang diterapkan
+            var apiKeyInput = $('#apiKeyInput').val();
+            var apiUrlInput = $('#apiUrlInput').val();
+            showLoadingModal(); // Tampilkan modal loading
+            $.ajax({
+                url: "updateTableWithFilter.php", // Ganti dengan URL yang sesuai untuk memperbarui tabel dengan filter
+                type: "GET",
+                data: { filter: selectedValues, var_id: selectedSubject, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput }, // Sertakan nilai filter dalam data permintaan
+                dataType: "json",
+                success: function(response) {
+                    // $('#tabledata').html(response); // Perbarui konten tabel dengan respons
+
+                    $('#tabledata').empty();
+
+                    if (response.success) {
+                        let tableHtml = "<table class='table table-bordered'>";
+                        tableHtml += "<thead>";
+                        tableHtml += "<tr>";
+                        if (response.filter.includes("wilayah")) {
+                            tableHtml += "<th scope='col'>Wilayah</th>";
+                        }
+                        if (response.filter.includes("tahun")) {
+                            tableHtml += "<th scope='col'>Tahun</th>";
+                        }
+                        if (response.filter.includes("jumlah")) {
+                            tableHtml += "<th scope='col'>Jumlah</th>";
+                        }
+                        if (response.filter.includes("satuan")) {
+                            tableHtml += "<th scope='col'>Satuan</th>";
+                        }
+                        tableHtml += "</tr>";
+                        tableHtml += "</thead>";
+                        tableHtml += "<tbody>";
+
+                        // Looping data tabel
+                        $.each(response.data, function(key, value) {
+                            if (value !== null && value !== '') {
+                                // Ambil kode wilayah dan tahun dari kunci data
+                                let wilayah_kode = key.substr(0, 4);
+                                let tahun_kode = key.substr(7, 3); // Ambil tiga karakter berikutnya sebagai tahun
+
+                                // Cari label wilayah dan tahun berdasarkan kode
+                                let wilayah_label = "";
+                                let tahun_label = "";
+                                $.each(response.vervar, function(index, wilayah) {
+                                    if (wilayah.val == wilayah_kode) {
+                                        wilayah_label = wilayah.label;
+                                        return false; // break loop
+                                    }
+                                });
+                                $.each(response.tahun, function(index, tahun) {
+                                    if (tahun.val == tahun_kode) {
+                                        tahun_label = tahun.label;
+                                        return false; // break loop
+                                    }
+                                });
+
+                                // Ambil unit (satuan) dari variabel
+                                let unit = "";
+                                $.each(response.var, function(index, variabel) {
+                                    if (variabel.val == response.var_id) {
+                                        unit = variabel.unit;
+                                        return false; // break loop
+                                    }
+                                });
+
+                                tableHtml += "<tr>";
+                                if (response.filter.includes("wilayah")) {
+                                    tableHtml += "<td>" + wilayah_label + "</td>";
+                                }
+                                if (response.filter.includes("tahun")) {
+                                    tableHtml += "<td>" + tahun_label + "</td>";
+                                }
+                                if (response.filter.includes("jumlah")) {
+                                    tableHtml += "<td>" + value + "</td>";
+                                }
+                                if (response.filter.includes("satuan")) {
+                                    tableHtml += "<td>" + unit + "</td>";
+                                }
+                                tableHtml += "</tr>";
+                            }
+                        });
+
+                        tableHtml += "</tbody>";
+                        tableHtml += "</table>";
+
+                        $('#tabledata').html(tableHtml);
+                    } else {
+                        $('#tabledata').html("<div class='alert alert-danger' role='alert'>Tidak ada data yang tersedia untuk ditampilkan.</div>");
+                    }
+
+                    hideLoadingModal(); // Sembunyikan modal loading setelah selesai
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal memperbarui tabel dengan filter:", error);
+                    hideLoadingModal(); // Sembunyikan modal loading jika terjadi kesalahan
+                }
+            });
+        });
     });
 </script>
+
+<!-- Modal Loading -->
 </body>
-<!-- 
-notes
-
-//ambil panjang datacontent jumlahkan menjadi datacontent.lenght -1
-//untuk substring end
-//ambil panjang string tahun 
-//jumlah panjang datacontent yang telah dikurangi e.g 10
-//untuk substring start=jumlah panjang tahun-jumlah panjang datacontent yang telah dikurangi satu
-// -->
 </html>
-
-
