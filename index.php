@@ -321,13 +321,13 @@
         apiKeyInput.change(function(){
             setTimeout(() => {
                 inputApiURL()
-            }, 2000);
+            }, 1000);
         })
 
         apiUrlInput.change(function(){
             setTimeout(() => {
                 inputApiURL()
-            }, 2000);
+            }, 1000);
         })
         
         function inputApiURL(){
@@ -337,7 +337,7 @@
             showLoadingModal();
             
             $.ajax({
-                url: "fungsi.php",
+                url: "getSubCategory.php",
                 type: "GET",
                 data: { apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
                 dataType: "json",

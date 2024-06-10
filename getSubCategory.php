@@ -39,34 +39,34 @@ function getSubcategories($apiUrlInput, $apiKeyInput) {
 }
 
 // Fungsi untuk mendapatkan data subjek berdasarkan subkategori dari API
-function getSubjects($subcat_id = null) {
-    if ($subcat_id !== null) {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/subcat/{$subcat_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
-    } else {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
-    }
-    return getData($url);
-}
+// function getSubjects($subcat_id = null) {
+//     if ($subcat_id !== null) {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/subcat/{$subcat_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     } else {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     }
+//     return getData($url);
+// }
 
-// Fungsi untuk mendapatkan data variabel berdasarkan subjek dari API
-function getVariables($subject_id = null) {
-    if ($subject_id !== null) {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/data/lang/ind/domain/1100/var/{$var_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
-    } else {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
-    }
-    return getData($url);
-}
+// // Fungsi untuk mendapatkan data variabel berdasarkan subjek dari API
+// function getVariables($subject_id = null) {
+//     if ($subject_id !== null) {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/data/lang/ind/domain/1100/var/{$var_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     } else {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     }
+//     return getData($url);
+// }
 
-// Fungsi untuk mendapatkan data tabel berdasarkan variabel dari API
-function getTableData($var_id = null) {
-    if ($var_id !== null) {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/var/{$var_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
-    } else {
-        $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
-    }
-    return getData($url);
-}
+// // Fungsi untuk mendapatkan data tabel berdasarkan variabel dari API
+// function getTableData($var_id = null) {
+//     if ($var_id !== null) {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/var/{$var_id}/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     } else {
+//         $url = "https://webapi.bps.go.id/v1/api/list/model/var/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/";
+//     }
+//     return getData($url);
+// }
 
 $apiUrlInput = isset($_GET['apiUrlInput']) ? $_GET['apiUrlInput'] : '';
 $apiKeyInput = isset($_GET['apiKeyInput']) ? $_GET['apiKeyInput'] : '';
