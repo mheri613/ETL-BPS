@@ -78,7 +78,7 @@
                     </div>
                     
                     </div>
-                    <button id="loadButton" class="btn btn-primary col-2 mt-3">Load Data</button>
+                    <button id="loadbpsbutton" class="btn btn-primary col-2 mt-3">Load Data</button>
                 </div>
                 
                 <div class="card-body">
@@ -109,14 +109,110 @@
                         <!-- Tab panel 2: Etl transform -->
                         <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
                             <!-- Card Container -->
-                            <div class="card">
-                                <div class="card-header bg-dark text-white">
-                                    Transform
+                            <div class="row mb-3">
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <h5 class="text" style="color: black;">URL SatuData</h5>
+                                    <input id="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
                                 </div>
-                                <div class="card-body">
-                                    <div id="transform-tabledata"></div>
+                                <!-- Kolom Key App SatuData -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <h5 class="text" style="color: black;">Key App SatuData</h5>
+                                    <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" aria-label="default input example">
+                                </div>
+                                <div class="col-md-auto col-sm-10 align-self-center text-center">
+                                    <div class="mt-4">
+                                        <button type="button" id="searchData" class="btn btn-primary">search</button>
+                                    </div>
+                                </div>
+                                <!-- Kolom Tahun SatuData -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <label for="tahunDropdown">Tahun:</label>
+                                    <select id="tahunDropdown" class="form-control">
+                                        <option value="">Pilih Tahun</option>
+                                    </select>
+                                </div>
+
+
+                                <!-- Kolom Cari Dataset SatuData -->
+                                <div class="col-lg-4 col-md-auto col-sm-12 mt-2">
+                                    <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
+                                    <form id="searchForm" class="d-flex">
+                                        <input id="searchInput" type="search" class="form-control" placeholder="Search" aria-label="Search">
+                                        <button id="searchButton" class="btn btn-primary" type="submit">Find</button>
+                                    </form>
                                 </div>
                             </div>
+
+                            <div class="row mt-3">
+                                <!-- Kolom pertama: Form Configure -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Dataset result</h5>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectFrom" multiple>
+                                                        <option value="Wilayah">Wilayah</option>
+                                                        <option value="Tahun">Tahun</option>
+                                                        <option value="Jumlah">Jumlah</option>
+                                                        <option value="Satuan">Satuan</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom kedua: Tombol navigasi -->
+                                <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center">
+                                    <div class="mb-2">
+                                        <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</button>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom ketiga: Form Result -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Result</h5>
+                                        <div class="card-body">
+                                            <form id="filterForm1">
+                                                <div class="mb-2">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectTo1" multiple></select>
+                                                    <!-- <button type="submit" class="btn btn-primary mb-2">Apply Filter</button> -->
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom keempat: Tombol Match -->
+                                <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
+                                    <div class="mb-2">
+                                        <button type="button" id="matchButton" class="btn btn-primary">Match</button>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom kelima: Form Result kedua -->
+                                <div class="col-lg-3 col-md-auto col-sm-12">
+                                    <div class="card mb-3">
+                                        <h5 class="card-header bg-dark text-white">Result</h5>
+                                        <div class="card-body">
+                                            <form id="filterForm2">
+                                                <div class="mb-2">
+                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
+                                                    <select class="form-select" id="selectTo2" multiple></select>
+                                                    <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
                         </div>
                         <!-- Tab panel 3: Etl load -->
                         <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
@@ -203,7 +299,7 @@ $(document).ready(function() {
     var apiKeyInput = $('#apiKeyInput');
     var apiUrlInput = $('#apiUrlInput');
 
-    $('#loadButton').click(function() {
+    $('#loadbpsbutton').click(function() {
         inputApiURL();
     });
 
@@ -311,17 +407,12 @@ $(document).ready(function() {
                 $('#tabledata').empty();
 
                 if (response.success) {
-                    let tableHtml = "<table id='dataTable' class='table table-striped'>";
-                    tableHtml += "<thead>";
-                    tableHtml += "<tr>";
-                    tableHtml += "<th scope='col'>Wilayah</th>";
-                    tableHtml += "<th scope='col'>Tahun</th>";
-                    tableHtml += "<th scope='col'>Jumlah</th>";
-                    tableHtml += "<th scope='col'>Satuan</th>";
-                    tableHtml += "</tr>";
-                    tableHtml += "</thead>";
-                    tableHtml += "<tbody>";
+                    // Create the table element
+                    let tableHtml = "<table id='dataTable' class='table table-striped'></table>";
+                    $('#tabledata').html(tableHtml);
 
+                    // Format the data for DataTables
+                    let dataSet = [];
                     $.each(response.data, function(key, value) {
                         if (value !== null && value !== '') {
                             let wilayah_label = "";
@@ -349,38 +440,71 @@ $(document).ready(function() {
                                 }
                             });
 
-                            tableHtml += "<tr>";
-                            tableHtml += "<td>" + wilayah_label + "</td>";
-                            tableHtml += "<td>" + tahun_label + "</td>";
-                            tableHtml += "<td>" + value + "</td>";
-                            tableHtml += "<td>" + unit + "</td>";
-                            tableHtml += "</tr>";
+                            dataSet.push([wilayah_label, tahun_label, value, unit]);
                         }
                     });
 
-                    tableHtml += "</tbody>";
-                    tableHtml += "</table>";
-
-                    $('#tabledata').html(tableHtml);
-
                     // Initialize DataTables
                     $('#dataTable').DataTable({
-                        paging:         false,
+                        data: dataSet,
+                        columns: [
+                            { title: "Wilayah" },
+                            { title: "Tahun" },
+                            { title: "Jumlah" },
+                            { title: "Satuan" }
+                        ],
+                        paging: false,
                         scrollCollapse: true,
-                        scrollY:        '50vh',
-                        searching:      false,
-                        showing:        false
+                        scrollY: '50vh',
+                        searching: false,
                     });
                 } else {
-                    $('#tabledata').html("<div class='alert alert-danger' role='alert'>Tidak ada data yang tersedia untuk ditampilkan.</div>");
+                    alert("Tidak ada data yang tersedia untuk ditampilkan.");
                 }
-
             },
             error: function(xhr, status, error) {
                 console.error("Gagal mengambil data tabel:", error);
             }
         });
     });
+
+    $('#searchData').click(function() {
+    inputApiURLForTahun();
+    });
+
+    function inputApiURLForTahun() {
+        var apiKey = $('#apiKeySatudata').val();
+        var apiUrl = $('#apiUrlSatudata').val();
+
+        console.log("API Key:", apiKey);
+        console.log("API URL:", apiUrl);
+
+        $.ajax({
+            url: "getTahun.php",
+            type: "GET",
+            data: { apiKey, apiUrl },
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            //     $('#tahunDropdown').empty();
+
+            //     if (response.success) {
+            //         $('#tahunDropdown').append('<option value="">Pilih Tahun</option>');
+            //         $.each(response.data, function(index, tahun) {
+            //             $('#tahunDropdown').append(
+            //                 '<option value="' + tahun + '">' + tahun + '</option>'
+            //             );
+            //         });
+            //     } else {
+            //         $('#tahunDropdown').append('<option value="" disabled>Tidak ada data tahun</option>');
+            //     }
+            // },
+            // error: function(xhr, status, error) {
+            //     console.error("Gagal mengambil data tahun:", error);
+            // }
+        });
+    }
+
 
     // Global AJAX event handlers
     $(document).ajaxStart(function() {
@@ -391,6 +515,7 @@ $(document).ready(function() {
         $('#loadingSpinner').addClass('d-none');
     });
 });
+
 </script>
 
 </body>
