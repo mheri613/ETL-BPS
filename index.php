@@ -117,16 +117,15 @@
                                 <!-- Kolom Key App SatuData -->
                                 <div class="col-lg-3 col-md-auto col-sm-12">
                                     <h5 class="text" style="color: black;">Key App SatuData</h5>
-                                    <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" aria-label="default input example">
-                                </div>
-                                <div class="col-md-auto col-sm-10 align-self-center text-center">
-                                    <div class="mt-4">
+                                    <form id="" class="d-flex">
+                                        <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" aria-label="default input example">
                                         <button type="button" id="searchData" class="btn btn-primary">search</button>
-                                    </div>
+                                    </form>
                                 </div>
+
                                 <!-- Kolom Tahun SatuData -->
                                 <div class="col-lg-3 col-md-auto col-sm-12">
-                                    <label for="tahunDropdown">Tahun:</label>
+                                    <h5 class="text" style="color: black;">Tahun</h5>
                                     <select id="tahunDropdown" class="form-control">
                                         <option value="">Pilih Tahun</option>
                                     </select>
@@ -147,17 +146,17 @@
                                 <!-- Kolom pertama: Form Configure -->
                                 <div class="col-lg-3 col-md-auto col-sm-12">
                                     <div class="card mb-3">
-                                        <h5 class="card-header bg-dark text-white">Dataset result</h5>
+                                        <h5 class="card-header bg-dark text-white">Dataset BPS result</h5>
                                         <div class="card-body">
                                             <form>
                                                 <div class="mb-3">
-                                                    <label for="filterInput" class="form-label multiple">Filter :</label>
-                                                    <select class="form-select" id="selectFrom" multiple>
-                                                        <option value="Wilayah">Wilayah</option>
-                                                        <option value="Tahun">Tahun</option>
-                                                        <option value="Jumlah">Jumlah</option>
-                                                        <option value="Satuan">Satuan</option>
-                                                    </select>
+                                                    <label for="filterInput" class="form-label multiple">Pilih Kolom :</label>
+                                                    <div id="column-names-container">
+                                                        <select class="form-select " id="selectFrom" multiple>
+                                                        <option value=""></option>
+                                                        </select>
+                                                        <br>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -165,7 +164,7 @@
                                 </div>
 
                                 <!-- Kolom kedua: Tombol navigasi -->
-                                <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center">
+                                <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center mb-4">
                                     <div class="mb-2">
                                         <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
                                     </div>
@@ -177,12 +176,12 @@
                                 <!-- Kolom ketiga: Form Result -->
                                 <div class="col-lg-3 col-md-auto col-sm-12">
                                     <div class="card mb-3">
-                                        <h5 class="card-header bg-dark text-white">Result</h5>
+                                        <h5 class="card-header bg-dark text-white">Result Collum Order</h5>
                                         <div class="card-body">
                                             <form id="filterForm1">
-                                                <div class="mb-2">
+                                                <div class="mb-4">
                                                     <label for="filterInput" class="form-label multiple">Filter :</label>
-                                                    <select class="form-select" id="selectTo1" multiple></select>
+                                                    <select class="form-select" id="selectTo" multiple></select>
                                                     <!-- <button type="submit" class="btn btn-primary mb-2">Apply Filter</button> -->
                                                 </div>
                                             </form>
@@ -203,10 +202,10 @@
                                         <h5 class="card-header bg-dark text-white">Result</h5>
                                         <div class="card-body">
                                             <form id="filterForm2">
-                                                <div class="mb-2">
+                                                <div class="">
                                                     <label for="filterInput" class="form-label multiple">Filter :</label>
                                                     <select class="form-select" id="selectTo2" multiple></select>
-                                                    <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
+                                                    <button type="submit" class="btn btn-primary mt-2">Apply Filter</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -332,6 +331,14 @@ $(document).ready(function() {
         });
     }
 
+    $('#moveRight').click(function() {
+        $('#selectFrom option:selected').appendTo('#selectTo');
+    });
+
+    $('#moveLeft').click(function() {
+        $('#selectTo option:selected').appendTo('#selectFrom');
+    });
+
     $('#subcatDropdown').change(function() {
         var selectedSubcat = $(this).val();
         var apiKey = apiKeyInput.val();
@@ -398,112 +405,149 @@ $(document).ready(function() {
         var apiUrlInput = $('#apiUrlInput').val();
         
         $.ajax({
-            url: "getTableData.php",
-            type: "GET",
-            data: { var_id: selectedVar, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
-            dataType: "json",
-            success: function(response) {
-                console.log(response);
-                $('#tabledata').empty();
+                url: "getTableData.php",
+                type: "GET",
+                data: { var_id: selectedVar, apiKeyInput: apiKeyInput, apiUrlInput: apiUrlInput },
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    $('#tabledata').empty();
 
-                if (response.success) {
-                    // Create the table element
-                    let tableHtml = "<table id='dataTable' class='table table-striped'></table>";
-                    $('#tabledata').html(tableHtml);
+                    if (response.success) {
+                        // Ekstrak nama kolom dari respons JSON
+                        let wilayahLabelExists = response.vervar.length > 0;
+                        let tahunLabelExists = response.tahun.length > 0;
+                        let unitExists = response.var.length > 0;
 
-                    // Format the data for DataTables
-                    let dataSet = [];
-                    $.each(response.data, function(key, value) {
-                        if (value !== null && value !== '') {
-                            let wilayah_label = "";
-                            let tahun_label = "";
-                            let unit = "";
+                        let columnNames = [];
+                        if (wilayahLabelExists) columnNames.push("Wilayah");
+                        if (tahunLabelExists) columnNames.push("Tahun");
+                        columnNames.push("Jumlah");
+                        if (unitExists) columnNames.push("Satuan");
 
-                            $.each(response.vervar, function(index, wilayah) {
-                                if (key.includes(wilayah.val)) {
-                                    wilayah_label = wilayah.label;
-                                    return false; // break loop
+                        // Tambahkan opsi ke elemen select
+                        let selectHtml = "";
+                        columnNames.forEach(function(name) {
+                            selectHtml += "<option value='" + name + "'>" + name + "</option>";
+                        });
+                        $('#selectFrom').html(selectHtml);
+
+                        // Buat elemen tabel
+                        let tableHtml = "<table id='dataTable' class='table table-striped'></table>";
+                        $('#tabledata').html(tableHtml);
+
+                        // Format data untuk DataTables
+                        let dataSet = [];
+                        $.each(response.data, function(key, value) {
+                            if (value !== null && value !== '') {
+                                let row = [];
+                                if (wilayahLabelExists) {
+                                    let wilayah_label = "";
+                                    $.each(response.vervar, function(index, wilayah) {
+                                        if (key.includes(wilayah.val)) {
+                                            wilayah_label = wilayah.label;
+                                            return false; // break loop
+                                        }
+                                    });
+                                    row.push(wilayah_label);
                                 }
-                            });
 
-                            $.each(response.tahun, function(index, tahun) {
-                                if (key.includes(tahun.val)) {
-                                    tahun_label = tahun.label;
-                                    return false; // break loop
+                                if (tahunLabelExists) {
+                                    let tahun_label = "";
+                                    $.each(response.tahun, function(index, tahun) {
+                                        if (key.includes(tahun.val)) {
+                                            tahun_label = tahun.label;
+                                            return false; // break loop
+                                        }
+                                    });
+                                    row.push(tahun_label);
                                 }
-                            });
 
-                            $.each(response.var, function(index, variabel) {
-                                if (key.includes(variabel.val)) {
-                                    unit = variabel.unit;
-                                    return false; // break loop
+                                row.push(value);
+
+                                if (unitExists) {
+                                    let unit = "";
+                                    $.each(response.var, function(index, variabel) {
+                                        if (key.includes(variabel.val)) {
+                                            unit = variabel.unit;
+                                            return false; // break loop
+                                        }
+                                    });
+                                    row.push(unit);
                                 }
-                            });
 
-                            dataSet.push([wilayah_label, tahun_label, value, unit]);
-                        }
-                    });
+                                dataSet.push(row);
+                            }
+                        });
 
-                    // Initialize DataTables
-                    $('#dataTable').DataTable({
-                        data: dataSet,
-                        columns: [
-                            { title: "Wilayah" },
-                            { title: "Tahun" },
-                            { title: "Jumlah" },
-                            { title: "Satuan" }
-                        ],
-                        paging: false,
-                        scrollCollapse: true,
-                        scrollY: '50vh',
-                        searching: false,
-                    });
-                } else {
-                    alert("Tidak ada data yang tersedia untuk ditampilkan.");
+                        // Inisialisasi DataTables
+                        $('#dataTable').DataTable({
+                            data: dataSet,
+                            columns: columnNames.map(name => ({ title: name })),
+                            paging: false,
+                            scrollCollapse: true,
+                            scrollY: '50vh',
+                            searching: false,
+                        });
+                    } else {
+                        alert("Tidak ada data yang tersedia untuk ditampilkan.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data tabel:", error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("Gagal mengambil data tabel:", error);
-            }
+            });
         });
-    });
 
     $('#searchData').click(function() {
-    inputApiURLForTahun();
+        $.ajax({
+                url: 'getTahun.php',
+                method: 'GET',
+                data: { endpoint: 'list' },
+                success: function(response) {
+                    console.log(response);
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal mengambil data tabel:", error);
+                }
+            });
+
+    // inputApiURLForTahun();
     });
 
-    function inputApiURLForTahun() {
-        var apiKey = $('#apiKeySatudata').val();
-        var apiUrl = $('#apiUrlSatudata').val();
+    // function inputApiURLForTahun() {
+    //     var apiKey = $('#apiKeySatudata').val();
+    //     var apiUrl = $('#apiUrlSatudata').val();
 
-        console.log("API Key:", apiKey);
-        console.log("API URL:", apiUrl);
+    //     console.log("API Key:", apiKey);
+    //     console.log("API URL:", apiUrl);
 
-        $.ajax({
-            url: "getTahun.php",
-            type: "GET",
-            data: { apiKey, apiUrl },
-            dataType: "json",
-            success: function(response) {
-                console.log(response);
-            //     $('#tahunDropdown').empty();
+    //     $.ajax({
+    //         url: "getTahun.php",
+    //         type: "GET",
+    //         data: { apiKey, apiUrl },
+    //         dataType: "json",
+    //         success: function(response) {
+    //             console.log(response);
+    //         //     $('#tahunDropdown').empty();
 
-            //     if (response.success) {
-            //         $('#tahunDropdown').append('<option value="">Pilih Tahun</option>');
-            //         $.each(response.data, function(index, tahun) {
-            //             $('#tahunDropdown').append(
-            //                 '<option value="' + tahun + '">' + tahun + '</option>'
-            //             );
-            //         });
-            //     } else {
-            //         $('#tahunDropdown').append('<option value="" disabled>Tidak ada data tahun</option>');
-            //     }
-            // },
-            // error: function(xhr, status, error) {
-            //     console.error("Gagal mengambil data tahun:", error);
-            // }
-        });
-    }
+    //         //     if (response.success) {
+    //         //         $('#tahunDropdown').append('<option value="">Pilih Tahun</option>');
+    //         //         $.each(response.data, function(index, tahun) {
+    //         //             $('#tahunDropdown').append(
+    //         //                 '<option value="' + tahun + '">' + tahun + '</option>'
+    //         //             );
+    //         //         });
+    //         //     } else {
+    //         //         $('#tahunDropdown').append('<option value="" disabled>Tidak ada data tahun</option>');
+    //         //     }
+    //         // },
+    //         // error: function(xhr, status, error) {
+    //         //     console.error("Gagal mengambil data tahun:", error);
+    //         // }
+    //     });
+    // }
 
 
     // Global AJAX event handlers
@@ -517,6 +561,6 @@ $(document).ready(function() {
 });
 
 </script>
-
+<!-- $url = "https://webapi.bps.go.id/v1/api/list/model/subject/lang/ind/domain/1100/key/effe4127b3a3d38d7fd0cb539852779c/"; -->
 </body>
 </html>
