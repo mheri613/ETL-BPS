@@ -199,6 +199,7 @@ $(document).ready(function () {
       scrollCollapse: true,
       scrollY: "50vh",
       searching: false,
+      info: false,
     });
   }
 });
