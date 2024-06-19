@@ -201,7 +201,7 @@ include 'api.php';
     </div>
   </div>
 
-  <?php include 'komponen/footer.php'; ?>
+  <?php //include 'komponen/footer.php'; ?>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
