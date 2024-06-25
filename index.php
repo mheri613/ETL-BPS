@@ -31,16 +31,16 @@ include 'api.php';
           </div>
 
           <div class="form-group col-3">
-            <label for="dropdown1">Select Subcategory:</label>
-            <select id="dropdown1" class="form-control">
-              <option value="">Select an option</option>
+            <label for="Subcategorydropdown">Select Subcategory:</label>
+            <select id="Subcategorydropdown" class="form-control">
+              <option value="">Subcategory</option>
             </select>
           </div>
 
           <div class="form-group col-3">
-            <label for="dropdown2">Select Variable:</label>
-            <select id="dropdown2" class="form-control">
-              <option value="">Select an option</option>
+            <label for="Subjectdropdown">Select Subject:</label>
+            <select id="Subjectdropdown" class="form-control">
+              <option value="">Subject</option>
             </select>
           </div>
 
@@ -51,9 +51,9 @@ include 'api.php';
           </div>
 
           <div class="form-group col-6">
-            <label for="dropdown3">Select Data:</label>
-            <select id="dropdown3" class="form-control">
-              <option value="">Select an option</option>
+            <label for="Tabledatadropdown">Select Data:</label>
+            <select id="Tabledatadropdown" class="form-control">
+              <option value="">Tabledata</option>
             </select>
           </div>
 
@@ -116,17 +116,16 @@ include 'api.php';
 
             <div class="row mt-3">
               <div class="col-lg-3 col-md-auto col-sm-12">
-                <div class="card mb-3">
+                <div class="card">
                   <h5 class="card-header bg-dark text-white">Dataset BPS result</h5>
                   <div class="card-body">
-                    <form>
-                      <div class="mb-3">
+                    <form class="mb-3">
                         <label for="filterInput" class="form-label multiple">Pilih Kolom :</label>
                         <div id="column-names-container">
                           <select class="form-select" id="selectFrom" multiple>
                             <option value=""></option>
                           </select>
-                        </div>
+                        
                       </div>
                     </form>
                   </div>
@@ -137,20 +136,18 @@ include 'api.php';
                   <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
                 </div>
                 <div class="mb-2">
-                  <button type="button" id="moveLeft" class="btn btn-primary">
-                    <<< /button>
-                </div>
+                  <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</div>
               </div>
               <div class="col-lg-3 col-md-auto col-sm-12">
-                <div class="card mb-3">
+                <div class="card">
                   <h5 class="card-header bg-dark text-white">Result Collum Order</h5>
                   <div class="card-body">
-                    <form id="filterForm1">
-                      <div class="mb-4">
+                    <form id="filterForm1" class="mb-3">
+                      
                         <label for="filterInput" class="form-label multiple">Filter :</label>
                         <select class="form-select" id="selectTo" multiple></select>
                         <!-- <button type="submit" class="btn btn-primary mb-2">Apply Filter</button> -->
-                      </div>
+                      
                     </form>
                   </div>
                 </div>
@@ -164,12 +161,12 @@ include 'api.php';
                 <div class="card mb-3">
                   <h5 class="card-header bg-dark text-white">Result</h5>
                   <div class="card-body">
-                    <form id="filterForm2">
-                      <div class="">
+                    <form id="filterForm2" class="mb-3">
+                      
                         <label for="filterInput" class="form-label multiple">Filter :</label>
                         <select class="form-select" id="selectTo2" multiple></select>
-                        <button type="submit" class="btn btn-primary mt-2">Apply Filter</button>
-                      </div>
+                        
+                      
                     </form>
                   </div>
                 </div>

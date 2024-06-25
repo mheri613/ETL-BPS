@@ -30,8 +30,8 @@ $(document).ready(function () {
       },
       dataType: "json",
       success: function (data) {
-        console.log(data);
-        var options = "<option value=''>Select an option</option>";
+        console.log(data)
+        var options = "<option value=''>Pilih Subcategory</option>";
         var subcategories = data.data[1]; // Access the subcategory array
         for (var i = 0; i < subcategories.length; i++) {
           options +=
@@ -41,12 +41,12 @@ $(document).ready(function () {
             subcategories[i].title +
             "</option>";
         }
-        $("#dropdown1").html(options);
+        $("#Subcategorydropdown").html(options);
       },
     });
   });
 
-  $("#dropdown1").change(function () {
+  $("#Subcategorydropdown").change(function () {
     var selectedId = $(this).val();
     $.ajax({
       type: "POST",
@@ -60,7 +60,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         console.log(data);
-        var options = "<option value=''>Select an option</option>";
+        var options = "<option value=''>Pilih Subject</option>";
         var subjects = data.data[1]; // Access the subject array
         for (var i = 0; i < subjects.length; i++) {
           options +=
@@ -70,12 +70,12 @@ $(document).ready(function () {
             subjects[i].title +
             "</option>";
         }
-        $("#dropdown2").html(options);
+        $("#Subjectdropdown").html(options);
       },
     });
   });
 
-  $("#dropdown2").change(function () {
+  $("#Subjectdropdown").change(function () {
     var selectedId = $(this).val();
     $.ajax({
       type: "POST",
@@ -88,8 +88,8 @@ $(document).ready(function () {
       },
       dataType: "json",
       success: function (data) {
-        console.log(data);
-        var options = "<option value=''>Select an option</option>";
+        console.log(data)
+        var options = "<option value=''>Pilih Tabledata</option>";
         if (data.data[1] && data.data[1].length > 0) {
           var variables = data.data[1];
           for (var i = 0; i < variables.length; i++) {
@@ -101,12 +101,12 @@ $(document).ready(function () {
               "</option>";
           }
         }
-        $("#dropdown3").html(options);
+        $("#Tabledatadropdown").html(options);
       },
     });
   });
 
-  $("#dropdown3").change(function () {
+  $("#Tabledatadropdown").change(function () {
     var selectedId = $(this).val();
     $.ajax({
       type: "POST",
@@ -119,7 +119,7 @@ $(document).ready(function () {
       },
       dataType: "json",
       success: function (data) {
-        console.log(data);
+        console.log(data)
         renderTableData(data);
       },
     });
