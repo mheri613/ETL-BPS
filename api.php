@@ -1,4 +1,5 @@
 <?php
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $action = $_POST['action'];
 
@@ -32,6 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $apiKeyInput = $_POST['apiKeyInput'];
       $TableData = getTableData($varId, $apiUrlInput, $apiKeyInput);
       echo json_encode($TableData);
+      break;
+
+    case 'getDataset':
+      $apiUrlInput = $_POST['apiUrlInput'];
+      $apiKeyInput = $_POST['apiKeyInput'];
+      $Dataset = getDataset($apiUrlInput, $apiKeyInput);
+      echo json_encode($Dataset);
       break;
 
     default:
@@ -71,6 +79,29 @@ function getTableData($varId, $apiUrlInput, $apiKeyInput) {
   $response = json_decode(curl_exec($ch), true);
   curl_close($ch);
   return $response;
+  }
+
+function getDataset($apiUrlInput, $apiKeyInput) {
+  header('Content-Type: application/json');
+  $curl = curl_init();
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => $apiUrlInput.'/api/v1.1/datasets/list',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+      'APIKEY: '.$apiKeyInput
+    ),
+  ));
+
+  $response = curl_exec($curl);
+  
+  curl_close($curl);
+  echo $response;
   }
 
 ?>

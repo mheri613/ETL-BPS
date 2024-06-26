@@ -130,12 +130,13 @@ $(document).ready(function () {
 
     let wilayahLabelExists = data.vervar.length > 0;
     let tahunLabelExists = data.tahun.length > 0;
+    let jumlahExists = data.var.length > 0;
     let unitExists = data.var.length > 0;
 
     let columnNames = [];
     if (wilayahLabelExists) columnNames.push("Wilayah");
     if (tahunLabelExists) columnNames.push("Tahun");
-    columnNames.push("Jumlah");
+    if (jumlahExists) columnNames.push("Jumlah");
     if (unitExists) columnNames.push("Satuan");
 
     // Tambahkan opsi ke elemen select
@@ -187,6 +188,15 @@ $(document).ready(function () {
         });
         row.push(unit);
 
+        let jumlah = "";
+        $.each(data.var, function (index, variabel) {
+          if (key.includes(variabel.val)) {
+            jumlah = variabel.label;
+            return false; // break loop
+          }
+        });
+        row.push(unit);
+
         dataSet.push(row);
       }
     });
@@ -202,4 +212,27 @@ $(document).ready(function () {
       info: false,
     });
   }
+
+  $("#searchData").click(function (event) {
+
+    var apiUrlInput = $("#apiUrlSatudata").val();
+    var apiKeyInput = $("#apiKeySatudata").val();
+    console.log("mulai ajax");
+    $.ajax({
+
+      type: "POST",
+      url: "api.php",
+      data: {
+        action: "getDataset",
+        apiUrlInput: apiUrlInput,
+        apiKeyInput: apiKeyInput,
+      },
+      // dataType: "json",
+      success: function (data) {
+        console.log("hello world");
+        console.log(data);
+      }
+    });
+    //event.preventDefault();
+  });
 });

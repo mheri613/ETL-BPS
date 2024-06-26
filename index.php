@@ -88,24 +88,24 @@ include 'api.php';
           <div class="tab-pane fade" id="transform" role="tabpanel" aria-labelledby="transform-tab">
             <!-- Card Container -->
             <div class="row mb-3">
-              <div class="col-lg-3 col-md-auto col-sm-12">
+              <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">URL SatuData</h5>
                 <input id="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
               </div>
-              <div class="col-lg-3 col-md-auto col-sm-12">
+              <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">Key App SatuData</h5>
                 <form id="" class="d-flex">
                   <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" aria-label="default input example">
-                  <button type="button" id="searchData" class="btn btn-primary">Search</button>
+                  <button type="button" id="searchData" nama="searchData" class="btn btn-primary">Search</button>
                 </form>
               </div>
-              <div class="col-lg-3 col-md-auto col-sm-12">
+              <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">Tahun</h5>
                 <select id="tahunDropdown" class="form-control">
                   <option value="">Pilih Tahun</option>
                 </select>
               </div>
-              <div class="col-lg-4 col-md-auto col-sm-12 mt-2">
+              <div class="form-group col-lg-4 col-md-auto col-sm-12 mt-2">
                 <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
                 <form id="searchForm" class="d-flex">
                   <input id="searchInput" type="search" class="form-control" placeholder="Search" aria-label="Search">
