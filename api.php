@@ -1,6 +1,7 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  header('Content-Type: application/json');
   $action = $_POST['action'];
 
   switch ($action) {
@@ -38,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     case 'getDataset':
       $apiUrlInput = $_POST['apiUrlInput'];
       $apiKeyInput = $_POST['apiKeyInput'];
-      $Dataset = getDataset($apiUrlInput, $apiKeyInput);
+      $apiNameInput = $_POST['apiNameInput'];
+      $Dataset = getDataset($apiUrlInput, $apiKeyInput, $apiNameInput);
       echo json_encode($Dataset);
       break;
 
@@ -81,11 +83,10 @@ function getTableData($varId, $apiUrlInput, $apiKeyInput) {
   return $response;
   }
 
-function getDataset($apiUrlInput, $apiKeyInput) {
-  header('Content-Type: application/json');
+function getDataset($apiUrlInput, $apiKeyInput, $apiNameInput) {
   $curl = curl_init();
   curl_setopt_array($curl, array(
-    CURLOPT_URL => $apiUrlInput.'/api/v1.1/datasets/list',
+    CURLOPT_URL => $apiUrlInput.'/api/v1.1/datasets/list/?limit=10&page=0&search='.$apiNameInput,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -98,10 +99,9 @@ function getDataset($apiUrlInput, $apiKeyInput) {
     ),
   ));
 
-  $response = curl_exec($curl);
+  $response = json_decode(curl_exec($curl), true);
   
   curl_close($curl);
-  echo $response;
+  return $response;
   }
-
 ?>

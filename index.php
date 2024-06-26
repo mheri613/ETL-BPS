@@ -1,6 +1,3 @@
-<?php
-include 'api.php';
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +24,7 @@ include 'api.php';
         <div class="row">
           <div class="form-group col-4">
             <label for="apiUrlInput">API URL:</label>
-            <input type="text" id="apiUrlInput" name="apiUrlInput" class="form-control">
+            <input type="text" id="apiUrlInput" name="apiUrlInput" class="form-control" value="https://webapi.bps.go.id">
           </div>
 
           <div class="form-group col-3">
@@ -46,7 +43,7 @@ include 'api.php';
 
           <div class="form-group col-4">
             <label for="apiKeyInput">API Key:</label>
-            <input type="text" id="apiKeyInput" name="apiKeyInput" class="form-control">
+            <input type="text" id="apiKeyInput" name="apiKeyInput" class="form-control" value="effe4127b3a3d38d7fd0cb539852779c">
             <button id="submit" class="btn btn-primary">Submit</button>
           </div>
 
@@ -90,13 +87,13 @@ include 'api.php';
             <div class="row mb-3">
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">URL SatuData</h5>
-                <input id="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" aria-label="default input example">
+                <input id="apiUrlSatudata" name="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" value="https://satudata.latih.id/">
               </div>
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">Key App SatuData</h5>
                 <form id="" class="d-flex">
-                  <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" aria-label="default input example">
-                  <button type="button" id="searchData" nama="searchData" class="btn btn-primary">Search</button>
+                  <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" value="$2b$10$4jCwY.APF2.mEbByX.koJ.QEISLmaaUWx7Z3jtlcOFbS.QN7ucda.">
+                  <button type="button" id="searchData" name="searchData" class="btn btn-primary">Search</button>
                 </form>
               </div>
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
@@ -108,8 +105,8 @@ include 'api.php';
               <div class="form-group col-lg-4 col-md-auto col-sm-12 mt-2">
                 <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
                 <form id="searchForm" class="d-flex">
-                  <input id="searchInput" type="search" class="form-control" placeholder="Search" aria-label="Search">
-                  <button id="searchButton" class="btn btn-primary" type="submit">Find</button>
+                  <input id="apiNameSatudata" name ="apiNameSatudata" type="search" class="form-control" placeholder="Search" aria-label="Search">
+                  <button id="SearchNameSatudata" name="SearchNameSatudata" class="btn btn-primary">Cari Data</button>
                 </form>
               </div>
             </div>

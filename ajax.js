@@ -213,11 +213,11 @@ $(document).ready(function () {
     });
   }
 
-  $("#searchData").click(function (event) {
-
+  $("#SearchNameSatudata").click(function (event) {
+    event.preventDefault();
     var apiUrlInput = $("#apiUrlSatudata").val();
     var apiKeyInput = $("#apiKeySatudata").val();
-    console.log("mulai ajax");
+    var apiNameInput = $("#apiNameSatudata").val();
     $.ajax({
 
       type: "POST",
@@ -226,13 +226,13 @@ $(document).ready(function () {
         action: "getDataset",
         apiUrlInput: apiUrlInput,
         apiKeyInput: apiKeyInput,
+        apiNameInput: apiNameInput,
       },
-      // dataType: "json",
+      dataType: "json",
       success: function (data) {
-        console.log("hello world");
         console.log(data);
       }
     });
-    //event.preventDefault();
+    //
   });
 });
