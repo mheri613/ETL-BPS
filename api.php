@@ -44,8 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       echo json_encode($Dataset);
       break;
 
+      case 'getKolomDataset':
+        $apiUrlInput = $_POST['apiUrlInput'];
+        $apiKeyInput = $_POST['apiKeyInput'];
+        $uuid = $_POST['uuid'];
+        $KolumDataset = getKolomDataset($apiUrlInput, $apiKeyInput, $uuid);
+        echo json_encode($KolumDataset);
+        break;
+
     default:
-      echo 'Invalid action';
+      echo 'salah nama casenya wak';
       break;
   }
 
@@ -103,5 +111,42 @@ function getDataset($apiUrlInput, $apiKeyInput, $apiNameInput) {
   
   curl_close($curl);
   return $response;
+  }
+
+  function getKolomDataset($apiUrlInput, $apiKeyInput, $uuid) {
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => $apiUrlInput.'/api/v1.1/datasets/'.$uuid,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'GET',
+      CURLOPT_HTTPHEADER => array(
+        'APIKEY: '.$apiKeyInput
+      ),
+    ));
+  
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
+    $url = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+
+    
+    curl_close($curl);
+    
+    if ($error) {
+      error_log("CURL error: $error");
+      return array('error' => 'CURL error wak', $url);
+    }
+    
+    $responseData = json_decode($response, true);
+    if (json_last_error()!== JSON_ERROR_NONE) {
+      error_log("JSON decoding error: ". json_last_error_msg());
+      return array('error' => 'JSON decoding yang error wak');
+    }
+    
+    return $responseData;
   }
 ?>

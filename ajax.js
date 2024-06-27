@@ -218,8 +218,8 @@ $(document).ready(function () {
     var apiUrlInput = $("#apiUrlSatudata").val();
     var apiKeyInput = $("#apiKeySatudata").val();
     var apiNameInput = $("#apiNameSatudata").val();
-    $.ajax({
 
+    $.ajax({
       type: "POST",
       url: "api.php",
       data: {
@@ -231,8 +231,44 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         console.log(data);
+        var options = "<option value=''>Pilih Dataset</option>";
+        var dataset = data.data.rows; // Access the subcategory array
+        console.log(dataset);
+        for (var i = 0; i < dataset.length; i++) {
+          options +=
+            '<option value="' +
+            dataset[i].uuid +
+            '">' +
+            dataset[i].judul +
+            "</option>";
+        }
+        $("#Datasetdropdown").html(options);
       }
     });
-    //
   });
+  $("#Datasetdropdown").change(function () {
+    var selecteduuid = $(this).val();
+    var apiUrlInput = $("#apiUrlSatudata").val();
+    var apiKeyInput = $("#apiKeySatudata").val();
+    console.log(selecteduuid);
+    $.ajax({
+      type: "POST",
+      url: "api.php",
+      data: {
+        action: "getKolomDataset",
+        uuid: selecteduuid,
+        apiUrlInput: apiUrlInput,
+        apiKeyInput: apiKeyInput,
+
+      },
+      dataType: "json",
+      success: function (data) {
+        console.log(data)
+
+      },
+    });
+    console.log(apiUrlInput);
+    console.log(apiKeyInput);
+  });
+
 });

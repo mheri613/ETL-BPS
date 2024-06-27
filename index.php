@@ -87,13 +87,13 @@
             <div class="row mb-3">
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">URL SatuData</h5>
-                <input id="apiUrlSatudata" name="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" value="https://satudata.latih.id/">
+                <input id="apiUrlSatudata" name="apiUrlSatudata" class="form-control" type="text" placeholder="Ketik URL" value="https://satudata.latih.id">
               </div>
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
                 <h5 class="text" style="color: black;">Key App SatuData</h5>
                 <form id="" class="d-flex">
                   <input id="apiKeySatudata" class="form-control" type="text" placeholder="Ketik Api Key" value="$2b$10$4jCwY.APF2.mEbByX.koJ.QEISLmaaUWx7Z3jtlcOFbS.QN7ucda.">
-                  <button type="button" id="searchData" name="searchData" class="btn btn-primary">Search</button>
+                  <!-- <button type="button" id="searchData" name="searchData" class="btn btn-primary">Search</button> -->
                 </form>
               </div>
               <div class="form-group col-lg-3 col-md-auto col-sm-12">
@@ -106,23 +106,28 @@
                 <h5 class="text" style="color: black;">Cari Dataset SatuData</h5>
                 <form id="searchForm" class="d-flex">
                   <input id="apiNameSatudata" name ="apiNameSatudata" type="search" class="form-control" placeholder="Search" aria-label="Search">
-                  <button id="SearchNameSatudata" name="SearchNameSatudata" class="btn btn-primary">Cari Data</button>
+                  <button id="SearchNameSatudata" name="SearchNameSatudata" class="btn btn-primary">Find</button>
                 </form>
+              </div>
+              <div class="form-group col-lg-3 col-md-auto col-sm-12 mt-2">
+                <h5 class="text" style="color: black;">Nama Dataset</h5>
+                <select id="Datasetdropdown" name="Datasetdropdown" class="form-control">
+                  <option value="">Nama Dataset</option>
+                </select>
               </div>
             </div>
 
             <div class="row mt-3">
-              <div class="col-lg-3 col-md-auto col-sm-12">
-                <div class="card">
-                  <h5 class="card-header bg-dark text-white">Dataset BPS result</h5>
+              <div class="col-lg-2 col-md-auto col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header bg-dark text-white">Dataset BPS</h5>
                   <div class="card-body">
-                    <form class="mb-3">
+                    <form class="mb-4">
                         <label for="filterInput" class="form-label multiple">Pilih Kolom :</label>
                         <div id="column-names-container">
                           <select class="form-select" id="selectFrom" multiple>
                             <option value=""></option>
                           </select>
-                        
                       </div>
                     </form>
                   </div>
@@ -135,9 +140,9 @@
                 <div class="mb-2">
                   <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</div>
               </div>
-              <div class="col-lg-3 col-md-auto col-sm-12">
+              <div class="col-lg-2 col-md-auto col-sm-12">
                 <div class="card">
-                  <h5 class="card-header bg-dark text-white">Result Collum Order</h5>
+                  <h5 class="card-header bg-dark text-white">kolom bps</h5>
                   <div class="card-body">
                     <form id="filterForm1" class="mb-3">
                       
@@ -149,21 +154,42 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-2 col-md-auto col-sm-12 align-self-center text-center">
+              <div class="col-lg-2 align-self-center text-center">
                 <div class="mb-2">
                   <button type="button" id="matchButton" class="btn btn-primary">Match</button>
                 </div>
               </div>
-              <div class="col-lg-3 col-md-auto col-sm-12">
+              <div class="col-lg-2 col-md-auto col-sm-12">
                 <div class="card mb-3">
-                  <h5 class="card-header bg-dark text-white">Result</h5>
+                  <h5 class="card-header bg-dark text-white">field satudata</h5>
                   <div class="card-body">
-                    <form id="filterForm2" class="mb-3">
-                      
+                    <form id="match-satu-data" class="mb-3">
                         <label for="filterInput" class="form-label multiple">Filter :</label>
-                        <select class="form-select" id="selectTo2" multiple></select>
-                        
-                      
+                        <select class="form-select" id="field-satudata" name="" multiple></select>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center mb-4">
+                <div class="mb-2">
+                  <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
+                </div>
+                <div class="mb-2">
+                  <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</div>
+              </div>
+
+              <div class="col-lg-2 col-md-auto col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header bg-dark text-white">field satu data all</h5>
+                  <div class="card-body">
+                    <form id="field-unmatch-satudata-all" class="mb-3">
+                  
+                        <label for="filterInput" class="form-label multiple">Filter :</label>
+                        <select class="form-select" id="field-satudata-all" multiple>
+                        <option value=""></option>
+                        </select>
+
                     </form>
                   </div>
                 </div>
