@@ -15,6 +15,14 @@ $(document).ready(function () {
     $("#selectTo option:selected").appendTo("#selectFrom");
   });
 
+  $("#Move-Match-Satudata").click(function () {
+    $("#field-satudata-all option:selected").appendTo("#field-satudata");
+  });
+
+  $("#Move-Unmatch-Satudata").click(function () {
+    $("#field-satudata option:selected").appendTo("#field-satudata-all");
+  });
+
   $("#submit").click(function (event) {
     event.preventDefault();
     var apiUrlInput = $("#apiUrlInput").val();
@@ -264,6 +272,18 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         console.log(data)
+        var options = "<option value=''></option>";
+        var dataset = data.data.fields; // Access the subcategory array
+        console.log(dataset);
+        for (var i = 0; i < dataset.length; i++) {
+          options +=
+            '<option value="' +
+            dataset[i] +
+            '">' +
+            dataset[i].name +
+            "</option>";
+        }
+        $("#field-satudata-all").html(options);
 
       },
     });

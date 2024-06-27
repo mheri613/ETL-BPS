@@ -163,7 +163,7 @@
                 <div class="card mb-3">
                   <h5 class="card-header bg-dark text-white">field satudata</h5>
                   <div class="card-body">
-                    <form id="match-satu-data" class="mb-3">
+                    <form id="field-match-satu-data" class="mb-3">
                         <label for="filterInput" class="form-label multiple">Filter :</label>
                         <select class="form-select" id="field-satudata" name="" multiple></select>
                     </form>
@@ -173,10 +173,10 @@
 
               <div class="col-lg-1 col-md-auto col-sm-12 align-self-center text-center mb-4">
                 <div class="mb-2">
-                  <button type="button" id="moveRight" class="btn btn-primary">&gt;&gt;</button>
+                  <button type="button" id="Move-Unmatch-Satudata" name="Move-Unmatch-Satudata" class="btn btn-primary">&gt;&gt;</button>
                 </div>
                 <div class="mb-2">
-                  <button type="button" id="moveLeft" class="btn btn-primary">&lt;&lt;</div>
+                  <button type="button" id="Move-Match-Satudata" name="Move-Match-Satudata" class="btn btn-primary">&lt;&lt;</div>
               </div>
 
               <div class="col-lg-2 col-md-auto col-sm-12">
